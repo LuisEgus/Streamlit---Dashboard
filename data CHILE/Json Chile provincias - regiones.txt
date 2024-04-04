@@ -1,0 +1,5 @@
+Regiones:
+https://raw.githubusercontent.com/GuVeLo/JSON-Maps/master/Chile-regiones.json
+
+Provincias:
+https://raw.githubusercontent.com/GuVeLo/JSON-Maps/master/Chile-provincias.json

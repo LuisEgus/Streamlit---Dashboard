@@ -6,3 +6,19 @@ streamlit run streamlit_app1.py
 
 cerrar dashboard:
 crtl + c
+
+
+
+Matriz
+
+Zone: Y
+Drug Grouo: X
+
+Eliminar titutlo de indice
+-Ajustar la escala de colores
+
+
+Negrita a los labels
+
+
+invertir matrix y barchat

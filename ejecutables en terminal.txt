@@ -1,5 +1,8 @@
 iniciar dashboard:
 streamlit run streamlit_app.py
 
+streamlit run streamlit_app1.py
+
+
 cerrar dashboard:
 crtl + c

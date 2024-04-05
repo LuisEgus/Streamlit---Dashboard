@@ -25,16 +25,20 @@ df_region = load_data(region_summary_url)
 sector_summary_url = 'https://raw.githubusercontent.com/LuisEgus/Streamlit---Dashboard/main/data%20CHILE/dta/sector_summary.csv'
 df_sector = load_data(sector_summary_url)
 
+# Cargar datos para industria
+df_industry = load_data('https://raw.githubusercontent.com/LuisEgus/Streamlit---Dashboard/main/data%20CHILE/dta/industry_summary.csv')
+
+
 # Sidebar - Selección de tipo de test
 with st.sidebar:
     st.title('🌎 Chile Data Dashboard')
     test_type = st.selectbox('Select Test Type', df_region['test_type'].unique())
+    color_theme = st.selectbox('Select Color Theme', ['blues', 'cividis', 'greens', 'inferno', 'magma', 'plasma', 'reds', 'rainbow', 'turbo', 'viridis'])
 
 # Filtrar los datos basados en el tipo de test seleccionado
 df_filtered = df_region[df_region['test_type'] == test_type]
-
-
 df_sector_filtered = df_sector[df_sector['test_type'] == test_type]
+df_industry_filtered = df_industry[df_industry['test_type'] == test_type]
 
 # Asegurarse de que no haya valores NaN que puedan afectar la visualización
 df_filtered['beta_robust'].fillna(0, inplace=True)
@@ -77,6 +81,33 @@ fig_heatmap = px.density_heatmap(df_sector_filtered,
                                  labels={'beta_robust':'Beta Robust', 'p_value':'P-Value', 'num_observ':'Number of Observations'},
                                  title='Heatmap de Sectores')
 
-# Mostrar ambos gráficos en el dashboard
+
+# Creación de la matriz de calor para la industria
+fig_heatmap_industry = px.density_heatmap(
+    df_industry_filtered,
+    x='rubro3', 
+    y='zone', 
+    z='beta_robust', 
+    color_continuous_scale=color_theme, 
+    title='Heatmap de Industrias',
+    hover_data={'beta_robust': ':.2f', 'p_value': ':.2f', 'num_observ': ':.0f'}
+)
+
+# Agregar etiquetas de datos con 'hover_data'
+fig_heatmap_industry.update_traces(
+    hovertemplate='<b>%{x}</b><br>%{y}<br>Beta Robust: %{z:.2f}<br>P-value: %{customdata[0]:.2f}<br>Num. Observ: %{customdata[1]:.0f}',
+    customdata=df_industry_filtered[['p_value', 'num_observ']].values
+)
+
+# Actualizar estilos del gráfico de matriz de calor
+fig_heatmap_industry.update_layout(
+    margin={"r":0, "t":50, "l":0, "b":100},
+    height=600,
+    plot_bgcolor='rgba(0,0,0,0)',
+    paper_bgcolor='rgba(0,0,0,0)'
+)
+
+# Mostrar gráficos en el dashboard
 st.plotly_chart(fig_chile, use_container_width=True)
 st.plotly_chart(fig_heatmap, use_container_width=True)
+st.plotly_chart(fig_heatmap_industry, use_container_width=True)

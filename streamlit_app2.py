@@ -33,7 +33,9 @@ with st.sidebar:
     st.title('🌎 Chile Data Dashboard')
     test_type = st.selectbox('Select Test Type', df_region['test_type'].unique())
     sector = st.sidebar.selectbox('Select Sector', df_buyer['sector'].unique())
-    color_theme = st.selectbox('Select Color Theme', ['blues', 'cividis', 'greens', 'inferno', 'magma', 'plasma', 'reds', 'rainbow', 'turbo', 'viridis'])
+    
+
+color_theme = ['blues', 'cividis', 'greens', 'inferno', 'magma', 'plasma', 'reds', 'rainbow', 'turbo', 'viridis']
 
 # Filtrar datos
 df_filtered = df_region[df_region['test_type'] == test_type].fillna(0)
@@ -61,7 +63,8 @@ def create_choropleth(df, color_theme):
         z=df['beta_robust'],
         colorscale=colorscale,
         featureidkey="properties.codregion",
-        hoverinfo='z+location',
+        text=df.apply(lambda row: f"Beta Robust: {row['beta_robust']}<br>p-value: {row['p_value']}<br>Num. Obsev.: {row['num_observ']}", axis=1),
+        hoverinfo="text",
         marker_line_color='black',
         marker_line_width=0.5
     ))
@@ -119,7 +122,6 @@ fig_heatmap.update_layout(
     # width=800,  # Descomenta y ajusta esto si también quieres cambiar el ancho
 )
 
-
 # Creación de la matriz de calor para la industria
 colorscale_industry = build_colorscale(df_industry_filtered['beta_robust'].min(), df_industry_filtered['beta_robust'].max(), color_theme)
 fig_heatmap_industry = px.density_heatmap(
@@ -142,7 +144,6 @@ fig_heatmap_industry.update_layout(
     # width=800,  # Descomenta y ajusta esto si también quieres cambiar el ancho
     margin={"r":0, "t":50, "l":0, "b":100}
 )
-
 
 # Crear el gráfico de barras para Buyer Summary filtrado
 colorscale_bar = build_colorscale(df_buyer_filtered['beta_robust'].min(), df_buyer_filtered['beta_robust'].max(), color_theme)

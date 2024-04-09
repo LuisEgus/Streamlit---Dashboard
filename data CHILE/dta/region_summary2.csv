@@ -1,49 +1,49 @@
-"region_ID,""region"",""test_type_ID"",""test_type"",""beta_robust"",""p_value"",""num_observ"",""description"",""codregion"",""""";;;;;;;;
-"1,""Antofagasta"",""1"",""90-Day Standardized Backlog"","""","""","""",""The null hypothesis of competition can not be rejected."",""2"",""""";;;;;;;;
-"1,""Antofagasta"",""2"",""180-Day Standardized Backlog"","""","""","""",""The null hypothesis of competition can not be rejected."",""2"",""""";;;;;;;;
-"1,""Antofagasta"",""3"",""Incumbency Status"",""0.027"",""0.099"",""26723"",""The null hypothesis of competition is rejected."",""2"",""""";;;;;;;;
-"2,""Arica y Parinacota"",""1"",""90-Day Standardized Backlog"","""","""","""",""The null hypothesis of competition can not be rejected."",""15"",""""";;;;;;;;
-"2,""Arica y Parinacota"",""2"",""180-Day Standardized Backlog"","""","""","""",""The null hypothesis of competition can not be rejected."",""15"",""""";;;;;;;;
-"2,""Arica y Parinacota"",""3"",""Incumbency Status"","""","""","""",""The null hypothesis of competition can not be rejected."",""15"",""""";;;;;;;;
-"3,""Atacama"",""1"",""90-Day Standardized Backlog"","""","""","""",""The null hypothesis of competition can not be rejected."",""3"",""""";;;;;;;;
-"3,""Atacama"",""2"",""180-Day Standardized Backlog"","""","""","""",""The null hypothesis of competition can not be rejected."",""3"",""""";;;;;;;;
-"3,""Atacama"",""3"",""Incumbency Status"","""","""","""",""The null hypothesis of competition can not be rejected."",""3"",""""";;;;;;;;
-"4,""Aysén del General Carlos Ibáñez del Campo"",""1"",""90-Day Standardized Backlog"",""-0.121"",""0.099"",""9213"",""The null hypothesis of competition is rejected."",""11"",""""";;;;;;;;
-"4,""Aysén del General Carlos Ibáñez del Campo"",""2"",""180-Day Standardized Backlog"","""","""","""",""The null hypothesis of competition can not be rejected."",""11"",""""";;;;;;;;
-"4,""Aysén del General Carlos Ibáñez del Campo"",""3"",""Incumbency Status"",""0.0398"",""0.041"",""9616"",""The null hypothesis of competition is rejected."",""11"",""""";;;;;;;;
-"5,""Biobío"",""1"",""90-Day Standardized Backlog"","""","""","""",""The null hypothesis of competition can not be rejected."",""8"",""""";;;;;;;;
-"5,""Biobío"",""2"",""180-Day Standardized Backlog"",""-0.0227"",""0.099"",""215159"",""The null hypothesis of competition is rejected."",""8"",""""";;;;;;;;
-"5,""Biobío"",""3"",""Incumbency Status"",""0.0286"",""0.001"",""223483"",""The null hypothesis of competition is rejected."",""8"",""""";;;;;;;;
-"6,""Coquimbo"",""1"",""90-Day Standardized Backlog"","""","""","""",""The null hypothesis of competition can not be rejected."",""4"",""""";;;;;;;;
-"6,""Coquimbo"",""2"",""180-Day Standardized Backlog"","""","""","""",""The null hypothesis of competition can not be rejected."",""4"",""""";;;;;;;;
-"6,""Coquimbo"",""3"",""Incumbency Status"",""0.0399"",""0.001"",""39482"",""The null hypothesis of competition is rejected."",""4"",""""";;;;;;;;
-"7,""La Araucanía"",""1"",""90-Day Standardized Backlog"",""-0.0429"",""0.099"",""79345"",""The null hypothesis of competition is rejected."",""9"",""""";;;;;;;;
-"7,""La Araucanía"",""2"",""180-Day Standardized Backlog"","""","""","""",""The null hypothesis of competition can not be rejected."",""9"",""""";;;;;;;;
-"7,""La Araucanía"",""3"",""Incumbency Status"",""0.0205"",""0.041"",""83141"",""The null hypothesis of competition is rejected."",""9"",""""";;;;;;;;
-"8,""Libertador General Bernardo O´Higgins"",""1"",""90-Day Standardized Backlog"",""-0.0583"",""0.001"",""144101"",""The null hypothesis of competition is rejected."",""6"",""""";;;;;;;;
-"8,""Libertador General Bernardo O´Higgins"",""2"",""180-Day Standardized Backlog"",""-0.0371"",""0.039"",""144101"",""The null hypothesis of competition is rejected."",""6"",""""";;;;;;;;
-"8,""Libertador General Bernardo O´Higgins"",""3"",""Incumbency Status"",""0.0143"",""0.099"",""150262"",""The null hypothesis of competition is rejected."",""6"",""""";;;;;;;;
-"9,""Los Lagos"",""1"",""90-Day Standardized Backlog"","""","""","""",""The null hypothesis of competition can not be rejected."",""10"",""""";;;;;;;;
-"9,""Los Lagos"",""2"",""180-Day Standardized Backlog"","""","""","""",""The null hypothesis of competition can not be rejected."",""10"",""""";;;;;;;;
-"9,""Los Lagos"",""3"",""Incumbency Status"","""","""","""",""The null hypothesis of competition can not be rejected."",""10"",""""";;;;;;;;
-"10,""Los Ríos"",""1"",""90-Day Standardized Backlog"","""","""","""",""The null hypothesis of competition can not be rejected."",""14"",""""";;;;;;;;
-"10,""Los Ríos"",""2"",""180-Day Standardized Backlog"","""","""","""",""The null hypothesis of competition can not be rejected."",""14"",""""";;;;;;;;
-"10,""Los Ríos"",""3"",""Incumbency Status"",""0.0358"",""0.001"",""53305"",""The null hypothesis of competition is rejected."",""14"",""""";;;;;;;;
-"11,""Magallanes y de la Antártica"",""1"",""90-Day Standardized Backlog"","""","""","""",""The null hypothesis of competition can not be rejected."",""12"",""""";;;;;;;;
-"11,""Magallanes y de la Antártica"",""2"",""180-Day Standardized Backlog"","""","""","""",""The null hypothesis of competition can not be rejected."",""12"",""""";;;;;;;;
-"11,""Magallanes y de la Antártica"",""3"",""Incumbency Status"","""","""","""",""The null hypothesis of competition can not be rejected."",""12"",""""";;;;;;;;
-"12,""Maule"",""1"",""90-Day Standardized Backlog"",""-0.0289"",""0.099"",""180388"",""The null hypothesis of competition is rejected."",""7"",""""";;;;;;;;
-"12,""Maule"",""2"",""180-Day Standardized Backlog"",""-0.0327"",""0.089"",""180388"",""The null hypothesis of competition is rejected."",""7"",""""";;;;;;;;
-"12,""Maule"",""3"",""Incumbency Status"","""","""","""",""The null hypothesis of competition can not be rejected."",""7"",""""";;;;;;;;
-"13,""Metropolitana de Santiago"",""1"",""90-Day Standardized Backlog"",""-0.025"",""0.089"",""211004"",""The null hypothesis of competition is rejected."",""13"",""""";;;;;;;;
-"13,""Metropolitana de Santiago"",""2"",""180-Day Standardized Backlog"","""","""","""",""The null hypothesis of competition can not be rejected."",""13"",""""";;;;;;;;
-"13,""Metropolitana de Santiago"",""3"",""Incumbency Status"",""0.018"",""0.001"",""218489"",""The null hypothesis of competition is rejected."",""13"",""""";;;;;;;;
-"14,""Tarapacá"",""1"",""90-Day Standardized Backlog"","""","""","""",""The null hypothesis of competition can not be rejected."",""1"",""""";;;;;;;;
-"14,""Tarapacá"",""2"",""180-Day Standardized Backlog"","""","""","""",""The null hypothesis of competition can not be rejected."",""1"",""""";;;;;;;;
-"14,""Tarapacá"",""3"",""Incumbency Status"","""","""","""",""The null hypothesis of competition can not be rejected."",""1"",""""";;;;;;;;
-"15,""Valparaíso"",""1"",""90-Day Standardized Backlog"","""","""","""",""The null hypothesis of competition can not be rejected."",""5"",""""";;;;;;;;
-"15,""Valparaíso"",""2"",""180-Day Standardized Backlog"","""","""","""",""The null hypothesis of competition can not be rejected."",""5"",""""";;;;;;;;
-"15,""Valparaíso"",""3"",""Incumbency Status"",""0.0209"",""0.001"",""156383"",""The null hypothesis of competition is rejected."",""5"",""""";;;;;;;;
-"16,""Ñuble"",""1"",""90-Day Standardized Backlog"","""","""","""",""The null hypothesis of competition can not be rejected."",""16"",""""";;;;;;;;
-"16,""Ñuble"",""2"",""180-Day Standardized Backlog"","""","""","""",""The null hypothesis of competition can not be rejected."",""16"",""""";;;;;;;;
-"16,""Ñuble"",""3"",""Incumbency Status"",""0.0581"",""0.031"",""6923"",""The null hypothesis of competition is rejected."",""16"",""""";;;;;;;;
+region_ID,"region","test_type_ID","test_type","beta_robust","p_value","num_observ","description","codregion",""
+1,"Antofagasta","1","90-Day Standardized Backlog","","","","The null hypothesis of competition can not be rejected.","2",""
+1,"Antofagasta","2","180-Day Standardized Backlog","","","","The null hypothesis of competition can not be rejected.","2",""
+1,"Antofagasta","3","Incumbency Status","0.027","0.099","26723","The null hypothesis of competition is rejected.","2",""
+2,"Arica y Parinacota","1","90-Day Standardized Backlog","","","","The null hypothesis of competition can not be rejected.","15",""
+2,"Arica y Parinacota","2","180-Day Standardized Backlog","","","","The null hypothesis of competition can not be rejected.","15",""
+2,"Arica y Parinacota","3","Incumbency Status","","","","The null hypothesis of competition can not be rejected.","15",""
+3,"Atacama","1","90-Day Standardized Backlog","","","","The null hypothesis of competition can not be rejected.","3",""
+3,"Atacama","2","180-Day Standardized Backlog","","","","The null hypothesis of competition can not be rejected.","3",""
+3,"Atacama","3","Incumbency Status","","","","The null hypothesis of competition can not be rejected.","3",""
+4,"AysÃ©n del General Carlos IbÃ¡Ã±ez del Campo","1","90-Day Standardized Backlog","-0.121","0.099","9213","The null hypothesis of competition is rejected.","11",""
+4,"AysÃ©n del General Carlos IbÃ¡Ã±ez del Campo","2","180-Day Standardized Backlog","","","","The null hypothesis of competition can not be rejected.","11",""
+4,"AysÃ©n del General Carlos IbÃ¡Ã±ez del Campo","3","Incumbency Status","0.0398","0.041","9616","The null hypothesis of competition is rejected.","11",""
+5,"BiobÃ­o","1","90-Day Standardized Backlog","","","","The null hypothesis of competition can not be rejected.","8",""
+5,"BiobÃ­o","2","180-Day Standardized Backlog","-0.0227","0.099","215159","The null hypothesis of competition is rejected.","8",""
+5,"BiobÃ­o","3","Incumbency Status","0.0286","0.001","223483","The null hypothesis of competition is rejected.","8",""
+6,"Coquimbo","1","90-Day Standardized Backlog","","","","The null hypothesis of competition can not be rejected.","4",""
+6,"Coquimbo","2","180-Day Standardized Backlog","","","","The null hypothesis of competition can not be rejected.","4",""
+6,"Coquimbo","3","Incumbency Status","0.0399","0.001","39482","The null hypothesis of competition is rejected.","4",""
+7,"La AraucanÃ­a","1","90-Day Standardized Backlog","-0.0429","0.099","79345","The null hypothesis of competition is rejected.","9",""
+7,"La AraucanÃ­a","2","180-Day Standardized Backlog","","","","The null hypothesis of competition can not be rejected.","9",""
+7,"La AraucanÃ­a","3","Incumbency Status","0.0205","0.041","83141","The null hypothesis of competition is rejected.","9",""
+8,"Libertador General Bernardo OÂ´Higgins","1","90-Day Standardized Backlog","-0.0583","0.001","144101","The null hypothesis of competition is rejected.","6",""
+8,"Libertador General Bernardo OÂ´Higgins","2","180-Day Standardized Backlog","-0.0371","0.039","144101","The null hypothesis of competition is rejected.","6",""
+8,"Libertador General Bernardo OÂ´Higgins","3","Incumbency Status","0.0143","0.099","150262","The null hypothesis of competition is rejected.","6",""
+9,"Los Lagos","1","90-Day Standardized Backlog","","","","The null hypothesis of competition can not be rejected.","10",""
+9,"Los Lagos","2","180-Day Standardized Backlog","","","","The null hypothesis of competition can not be rejected.","10",""
+9,"Los Lagos","3","Incumbency Status","","","","The null hypothesis of competition can not be rejected.","10",""
+10,"Los RÃ­os","1","90-Day Standardized Backlog","","","","The null hypothesis of competition can not be rejected.","14",""
+10,"Los RÃ­os","2","180-Day Standardized Backlog","","","","The null hypothesis of competition can not be rejected.","14",""
+10,"Los RÃ­os","3","Incumbency Status","0.0358","0.001","53305","The null hypothesis of competition is rejected.","14",""
+11,"Magallanes y de la AntÃ¡rtica","1","90-Day Standardized Backlog","","","","The null hypothesis of competition can not be rejected.","12",""
+11,"Magallanes y de la AntÃ¡rtica","2","180-Day Standardized Backlog","","","","The null hypothesis of competition can not be rejected.","12",""
+11,"Magallanes y de la AntÃ¡rtica","3","Incumbency Status","","","","The null hypothesis of competition can not be rejected.","12",""
+12,"Maule","1","90-Day Standardized Backlog","-0.0289","0.099","180388","The null hypothesis of competition is rejected.","7",""
+12,"Maule","2","180-Day Standardized Backlog","-0.0327","0.089","180388","The null hypothesis of competition is rejected.","7",""
+12,"Maule","3","Incumbency Status","","","","The null hypothesis of competition can not be rejected.","7",""
+13,"Metropolitana de Santiago","1","90-Day Standardized Backlog","-0.025","0.089","211004","The null hypothesis of competition is rejected.","13",""
+13,"Metropolitana de Santiago","2","180-Day Standardized Backlog","","","","The null hypothesis of competition can not be rejected.","13",""
+13,"Metropolitana de Santiago","3","Incumbency Status","0.018","0.001","218489","The null hypothesis of competition is rejected.","13",""
+14,"TarapacÃ¡","1","90-Day Standardized Backlog","","","","The null hypothesis of competition can not be rejected.","1",""
+14,"TarapacÃ¡","2","180-Day Standardized Backlog","","","","The null hypothesis of competition can not be rejected.","1",""
+14,"TarapacÃ¡","3","Incumbency Status","","","","The null hypothesis of competition can not be rejected.","1",""
+15,"ValparaÃ­so","1","90-Day Standardized Backlog","","","","The null hypothesis of competition can not be rejected.","5",""
+15,"ValparaÃ­so","2","180-Day Standardized Backlog","","","","The null hypothesis of competition can not be rejected.","5",""
+15,"ValparaÃ­so","3","Incumbency Status","0.0209","0.001","156383","The null hypothesis of competition is rejected.","5",""
+16,"Ã‘uble","1","90-Day Standardized Backlog","","","","The null hypothesis of competition can not be rejected.","16",""
+16,"Ã‘uble","2","180-Day Standardized Backlog","","","","The null hypothesis of competition can not be rejected.","16",""
+16,"Ã‘uble","3","Incumbency Status","0.0581","0.031","6923","The null hypothesis of competition is rejected.","16",""

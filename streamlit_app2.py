@@ -17,7 +17,10 @@ def load_data(url):
 # Cargar datos (raw-github)
 geojson_url = 'https://raw.githubusercontent.com/fcortes/Chile-GeoJSON/master/Regional.geojson'
 chile_geojson = requests.get(geojson_url).json()
-region_summary_url = 'https://raw.githubusercontent.com/LuisEgus/Streamlit---Dashboard/main/data%20CHILE/dta/region_summary.csv'
+
+#region_summary_url = 'https://raw.githubusercontent.com/LuisEgus/Streamlit---Dashboard/main/data%20CHILE/dta/region_summary.csv'
+
+region_summary_url = 'https://raw.githubusercontent.com/LuisEgus/Streamlit---Dashboard/main/data%20CHILE/dta/region_summary2%20(1).csv'
 sector_summary_url = 'https://raw.githubusercontent.com/LuisEgus/Streamlit---Dashboard/main/data%20CHILE/dta/sector_summary.csv'
 industry_summary_url = 'https://raw.githubusercontent.com/LuisEgus/Streamlit---Dashboard/main/data%20CHILE/dta/industry_summary.csv'
 buyer_summary_url = 'https://raw.githubusercontent.com/LuisEgus/Streamlit---Dashboard/main/data%20CHILE/dta/buyer_summary.csv'
@@ -82,7 +85,10 @@ def create_choropleth(df, color_theme):
 
     fig.update_layout(
         margin={"r":0, "t":0, "l":0, "b":0},
-        height=500
+        height=500,
+        coloraxis_colorbar={
+        'title':''
+    }
 
     )
     return fig
@@ -113,14 +119,32 @@ fig_heatmap = px.density_heatmap(
     y='sector',
     z='beta_robust',
     color_continuous_scale=colorscale_sector,
-    labels={'beta_robust': 'Beta Robust', 'p_value': 'P-Value', 'num_observ': 'Number of Observations'},
-    title='Vector of sectors'
+    labels={
+        'beta_robust': 'Beta Robust',
+        'p_value': 'P-Value',
+        'num_observ': 'Number of Observations',
+        'test_type': 'Type of Test',  # Etiqueta para el eje X actualizada
+        'sector': 'Sectors'  # Etiqueta para el eje Y actualizada
+    },
+    title='Vector of sectors',
+    hover_data={
+        'beta_robust': True,
+        'p_value': True,
+        'num_observ': True,
+        'description': True  # Asumiendo que no quieres mostrar la descripción
+    }
+    
 )
 # Modificar la altura del gráfico de vector de calor para los sectores
 fig_heatmap.update_layout(
-    height=500,  # Ajusta esto a la altura deseada
-    # width=800,  # Descomenta y ajusta esto si también quieres cambiar el ancho
+    height=500,
+        # Ajusta esto a la altura deseada
+    # width=800,
+    coloraxis_colorbar={
+        'title':''
+    }  # Descomenta y ajusta esto si también quieres cambiar el ancho
 )
+
 
 # Creación de la matriz de calor para la industria
 colorscale_industry = build_colorscale(df_industry_filtered['beta_robust'].min(), df_industry_filtered['beta_robust'].max(), color_theme)
@@ -130,19 +154,22 @@ fig_heatmap_industry = px.density_heatmap(
     y='zone',
     z='beta_robust',
     color_continuous_scale=colorscale_industry,
-    title='Matrix of macrozones'
+    title='Matrix of macrozones',
+    labels={'zone': 'Zone', 'rubro3': 'Drug Group'},
 )
 fig_heatmap_industry.update_traces(
     hovertemplate='<b>%{x}</b><br>%{y}<br>Beta Robust: %{z:.2f}<br>P-value: %{customdata[0]:.2f}<br>Num. Observ: %{customdata[1]:.0f}',
     customdata=df_industry_filtered[['p_value', 'num_observ']].values
 )
-fig_heatmap_industry.update_layout(height=600, margin={"r":0, "t":50, "l":0, "b":100})
 
 # Modificar la altura de la matriz de calor para la industria
 fig_heatmap_industry.update_layout(
     height=700,  # Ajusta esto a la altura deseada
     # width=800,  # Descomenta y ajusta esto si también quieres cambiar el ancho
-    margin={"r":0, "t":50, "l":0, "b":100}
+    margin={"r":0, "t":50, "l":0, "b":100},
+    coloraxis_colorbar={
+        'title':''
+    }
 )
 
 # Crear el gráfico de barras para Buyer Summary filtrado
@@ -161,7 +188,7 @@ fig_bar.update_layout(
     margin={"r":0, "t":50, "l":0, "b":0},
     height=500,
     coloraxis_colorbar={
-        'title':'Beta Robust'
+        'title':''
     }
 )
 

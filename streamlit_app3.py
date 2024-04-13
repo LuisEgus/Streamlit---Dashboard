@@ -52,26 +52,23 @@ df_buyer_filtered = df_buyer[(df_buyer['test_type'] == test_type) & (df_buyer['s
 df_zone_filtered = df_zone[(df_zone['test_type'] == test_type)].fillna(0)
 
 # Función para crear un mapa coroplético con escala de colores dinámica
-def create_choropleth(df, color_theme):
-    min_val, max_val = df['beta_robust'].min(), df['beta_robust'].max()
-    
-    # Usar una escala de colores de Plotly, y crear una personalizada para el valor 0
-    colorscale = px.colors.diverging.RdBu
+def create_choropleth(df, geojson, identifier, color_field):
+    min_val, max_val = df[color_field].min(), df[color_field].max()
     if min_val >= 0:
-        colorscale = [[0, "white"], [1, colorscale[-1]]]
+        colorscale = [[0, "white"], [1, px.colors.diverging.RdBu[-1]]]
     elif max_val <= 0:
-        colorscale = [[0, colorscale[0]], [1, "white"]]
-    else:  
+        colorscale = [[0, px.colors.diverging.RdBu[0]], [1, "white"]]
+    else:
         zero_norm = abs(min_val) / (max_val - min_val)
-        colorscale = [[0, colorscale[0]], [zero_norm, "white"], [1, colorscale[-1]]]
+        colorscale = [[0, px.colors.diverging.RdBu[0]], [zero_norm, "white"], [1, px.colors.diverging.RdBu[-1]]]
 
     fig = go.Figure(go.Choropleth(
-        geojson=chile_geojson,
-        locations=df['codregion'],
-        z=df['beta_robust'],
+        geojson=geojson,
+        locations=df[identifier],
+        z=df[color_field],
         colorscale=colorscale,
-        featureidkey="properties.codregion",
-        text=df.apply(lambda row: f"Beta Robust: {row['beta_robust']}<br>p-value: {row['p_value']}<br>Num. Obsev.: {row['num_observ']}", axis=1),
+        featureidkey=f"properties.{identifier}",
+        text=df.apply(lambda row: f"Beta Robust: {row[color_field]}<br>p-value: {row['p_value']}<br>Num. Obsev.: {row['num_observ']}<br>Region.: {row[identifier]}", axis=1),
         hoverinfo="text",
         marker_line_color='black',
         marker_line_width=0.5
@@ -90,70 +87,13 @@ def create_choropleth(df, color_theme):
 
     fig.update_layout(
         margin={"r":0, "t":0, "l":0, "b":0},
-        height=500,
-        coloraxis_colorbar={
-        'title':''
-    }
-
+        height=500
     )
     return fig
 
-# Crear el gráfico de mapa coroplético
-fig_chile1 = create_choropleth(df_filtered, color_theme)
 
-
-###############PRUEBA
-
-# Función para crear un mapa coroplético con escala de colores dinámica
-def create_zone_choropleth(df, color_theme):
-    min_val, max_val = df['beta_robust'].min(), df['beta_robust'].max()
-    
-    # Usar una escala de colores de Plotly, y crear una personalizada para el valor 0
-    colorscale = px.colors.diverging.RdBu
-    if min_val >= 0:
-        colorscale = [[0, "white"], [1, colorscale[-1]]]
-    elif max_val <= 0:
-        colorscale = [[0, colorscale[0]], [1, "white"]]
-    else:  
-        zero_norm = abs(min_val) / (max_val - min_val)
-        colorscale = [[0, colorscale[0]], [zero_norm, "white"], [1, colorscale[-1]]]
-
-    fig = go.Figure(go.Choropleth(
-        geojson=chile_geojson,
-        locations=df['zone'],
-        z=df['beta_robust'],
-        colorscale=colorscale,
-        featureidkey="properties.zone",
-        text=df.apply(lambda row: f"Beta Robust: {row['beta_robust']}<br>p-value: {row['p_value']}<br>Num. Obsev.: {row['num_observ']}", axis=1),
-        hoverinfo="text",
-        marker_line_color='black',
-        marker_line_width=0.5
-    ))
-
-    fig.update_geos(
-        fitbounds="locations",
-        visible=False,
-        showcountries=False,
-        showcoastlines=False,
-        showland=False,
-        showocean=False,
-        projection_type="mercator",
-        center={"lat": -35.6751, "lon": -71.543}
-    )
-
-    fig.update_layout(
-        margin={"r":0, "t":0, "l":0, "b":0},
-        height=500,
-        coloraxis_colorbar={
-        'title':''
-    }
-
-    )
-    return fig
-
-# Crear el gráfico de mapa coroplético
-fig_chile2 = create_zone_choropleth(df_zone_filtered, color_theme)
-
+# Usar la función modificada
+fig_chile1 = create_choropleth(df_filtered, chile_geojson, 'codregion', 'beta_robust')
 
 # Función auxiliar para construir una escala de colores que mapea 0 a blanco
 def build_colorscale(min_val, max_val, color_theme):
@@ -255,6 +195,10 @@ col1, col2, col3 = st.columns([1, 1, 1])
 with col1:
     st.plotly_chart(fig_chile1, use_container_width=True)
 with col2:
+    # Selector de zona arriba del segundo mapa
+    zone_selected = st.selectbox('Select Zone', df_zone_filtered['zone'].unique(), key='zone_selector')
+    df_zone_selected = df_zone_filtered[df_zone_filtered['zone'] == zone_selected]
+    fig_chile2 = create_choropleth(df_zone_selected, chile_geojson, 'zone', 'beta_robust')
     st.plotly_chart(fig_chile2, use_container_width=True)
 with col3:
     st.plotly_chart(fig_heatmap, use_container_width=True)

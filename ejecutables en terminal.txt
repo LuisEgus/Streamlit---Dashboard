@@ -7,6 +7,8 @@ streamlit run streamlit_app1.py
 
 streamlit run streamlit_app2.py
 
+streamlit run streamlit_app3.py
+
 En Laptop QLAB:
 
 D:\Users\u_sociales\AppData\Local\Microsoft\WindowsApps\python.exe -m streamlit run D:\Users\u_sociales\Documents\GitHub\Streamlit---Dashboard\streamlit_app1.py

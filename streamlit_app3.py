@@ -93,7 +93,7 @@ def create_choropleth(df, geojson, identifier, color_field):
 
 
 # Usar la función modificada
-fig_chile1 = create_choropleth(df_filtered, chile_geojson, 'codregion', 'beta_robust')
+fig_chile1 = create_choropleth(df_filtered, chile_geojson, 'cir_sena', 'beta_robust')
 
 # Función auxiliar para construir una escala de colores que mapea 0 a blanco
 def build_colorscale(min_val, max_val, color_theme):

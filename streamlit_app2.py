@@ -58,7 +58,7 @@ df_filtered = df_region[df_region['test_type'] == test_type].fillna(0)
 df_sector_filtered = df_sector[df_sector['test_type'] == test_type].fillna(0)
 df_industry_filtered = df_industry[df_industry['test_type'] == test_type].fillna(0)
 df_buyer_filtered = df_buyer[(df_buyer['test_type'] == test_type) & (df_buyer['sector'] == sector)]
-df_zone_filtered = df_zone[(df_zone['test_type'] == test_type)].fillna(0)
+df_zone_filtered = df_zone[(df_zone['test_type'] == test_type) & (df_zone['zone'] == zone_selected)].fillna(0)
 
 # Función para crear un mapa coroplético con escala de colores dinámica
 def create_choropleth(df, color_theme):

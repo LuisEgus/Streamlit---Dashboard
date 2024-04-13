@@ -112,29 +112,39 @@ fig_chile1 = create_choropleth(df_filtered, color_theme)
 
 
 ###############PRUEBA
-
-# Función para crear un mapa coroplético con escala de colores dinámica
 # Función para crear un mapa coroplético con escala de colores dinámica
 def create_zone_choropleth(df, color_theme):
+        # Establecer los valores mínimo y máximo
     min_val, max_val = df['beta_robust'].min(), df['beta_robust'].max()
-    
-    # Usar una escala de colores de Plotly, y crear una personalizada para el valor 0
+
+    # Configurar la escala de colores para incluir blanco en el centro si hay valores tanto positivos como negativos
     colorscale = px.colors.diverging.RdBu
-    if min_val >= 0:
-        colorscale = [[0, "white"], [1, colorscale[-1]]]
+    midpoint = abs(min_val) / (abs(max_val) + abs(min_val))
+    
+    # Establecer la escala de colores dependiendo del rango de los datos
+    if min_val < 0 and max_val > 0:
+        # Si hay valores negativos y positivos, insertamos blanco en el punto cero exacto
+        colorscale = [
+            [0, colorscale[0]],
+            [midpoint, "white"],
+            [midpoint + 0.01, colorscale[-1]],
+            [1, colorscale[-1]]
+        ]
     elif max_val <= 0:
-        colorscale = [[0, colorscale[0]], [1, "white"]]
-    else:  
-        zero_norm = abs(min_val) / (max_val - min_val)
-        colorscale = [[0, colorscale[0]], [zero_norm, "white"], [1, colorscale[-1]]]
+        # Si todos los valores son negativos o cero
+        colorscale = [[0, "white"], [1, colorscale[0]]]
+    elif min_val >= 0:
+        # Si todos los valores son positivos o cero
+        colorscale = [[0, "white"], [1, colorscale[-1]]]
+
 
     fig = go.Figure(go.Choropleth(
         geojson=chile_geojson,
         locations=df['codregion'],
         z=df['beta_robust'],
-        colorscale=colorscale,
+        color_continuous_scale=colorscale,
         featureidkey="properties.codregion",
-        text=df.apply(lambda row: f"Beta Robust: {row['beta_robust']}<br>p-value: {row['p_value']}<br>Num. Obsev.: {row['num_observ']}", axis=1),
+        text=df.apply(lambda row: f"Beta Robust: {row['beta_robust']}<br>p-value: {row['p_value']}<br>Num. Observ.: {row['num_observ']}", axis=1),
         hoverinfo="text",
         marker_line_color='black',
         marker_line_width=0.5
@@ -152,19 +162,20 @@ def create_zone_choropleth(df, color_theme):
     )
 
     fig.update_layout(
+        title_text="Distribución Espacial de la Beta Robusta en las Regiones de Chile",
+        title_x=0.5,  # Centra el título
         margin={"r":0, "t":0, "l":0, "b":0},
         height=500,
         coloraxis_colorbar={
-        'title':''
-    }
+            'title':'a'
+        }
 
     )
     return fig
 
+
 # Crear el gráfico de mapa coroplético
 fig_chile2 = create_choropleth(df_zone_filtered, color_theme)
-
-
 
 
 # Función auxiliar para construir una escala de colores que mapea 0 a blanco

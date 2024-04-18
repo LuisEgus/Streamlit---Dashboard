@@ -414,30 +414,26 @@ fig_bar.update_layout(
 ####################################
 
 # Distribución de gráficos en el dashboard
-col1, col2, col3 = st.columns([1, 1, 1])
+col1, col2, col3 = st.columns(3)
 
 # Crear KPIs en las columnas basadas en el sector filtrado por test_type
-def display_kpi(df, sectors, test_type_selection, col):
-    # Filtrar por sector y test_type
-    sector_data = df[(df['sector'] == sectors) & (df['test_type'] == test_type_selection)]
-    if not sector_data.empty:
-        data = sector_data.iloc[0]  # Asumiendo que hay una sola fila por cada sector y test_type
-        with col:
-            st.markdown(f"#### {sectors}")
-            st.markdown(f"**Beta Robust:** {data['beta_robust']:.4f}")
-            st.markdown(f"**P-Value:** {data['p_value']:.3f}")
-            st.markdown(f"**Num Observ:** {data['num_observ']:,}")
-            st.write(data['description'])
+def display_kpi(df, sample_category, col):
+    # Filtrar por la categoría de muestra correcta del dataframe de ownership
+    sample_data = df[df['sample'] == sample_category]
+    if not sample_data.empty:
+        data = sample_data.iloc[0]
+        col.markdown(f"### {sample_category}")
+        col.markdown(f"**Beta Robust:** {data['beta_robust']:.4f}")
+        col.markdown(f"**P-Value:** {data['p_value']:.3f}")
+        col.markdown(f"**Num Observ:** {int(data['num_observ']):,}")
     else:
-        with col:
-            st.markdown(f"#### {sectors}")
-            st.markdown("**No data available**")
+        col.markdown(f"### {sample_category}")
+        col.markdown("**No data available**")
 
-# Llama a la función display_kpi para cada sector y columna correspondiente
-# Asegúrate de que los nombres de las categorías de sector sean exactamente como aparecen en los datos
-display_kpi(df_ownership_filtered, 'Full sample', test_type, col1)
-display_kpi(df_ownership_filtered, 'Bidders without cross-ownership', test_type, col2)
-display_kpi(df_ownership_filtered, 'Bidders with cross-ownership', test_type, col3)
+# Ahora llama a display_kpi con los nombres de las categorías correctas
+display_kpi(df_ownership_filtered, 'Full sample', col1)
+display_kpi(df_ownership_filtered, 'Bidders without cross-ownership', col2)
+display_kpi(df_ownership_filtered, 'Bidders with cross-ownership', col3)
 
 with col1:
 

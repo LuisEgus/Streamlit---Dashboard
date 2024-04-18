@@ -27,7 +27,7 @@ region_summary_url = 'https://raw.githubusercontent.com/LuisEgus/Streamlit---Das
 sector_summary_url = 'https://raw.githubusercontent.com/LuisEgus/Streamlit---Dashboard/main/data%20CHILE/dta/sector_summary.csv'
 industry_summary_url = 'https://raw.githubusercontent.com/LuisEgus/Streamlit---Dashboard/main/data%20CHILE/dta/industry_summary.csv'
 buyer_summary_url = 'https://raw.githubusercontent.com/LuisEgus/Streamlit---Dashboard/main/data%20CHILE/dta/buyer_summary.csv'
-zone_sumary_url = 'https://raw.githubusercontent.com/LuisEgus/Streamlit---Dashboard/main/data%20CHILE/dta/zone_summary.csv'
+zone_sumary_url = 'https://raw.githubusercontent.com/LuisEgus/Streamlit---Dashboard/main/data%20CHILE/dta/zone_summary%20(1).csv'
 
 # Cargar los dataset como dataframe
 df_region = load_data(region_summary_url)
@@ -169,6 +169,8 @@ fig_bar_zones = px.bar(
 
 
 fig_bar_zones.update_traces(
+    marker_line_color='rgb(204, 202, 202)',  # Define el color del borde de las barras
+    marker_line_width=0.5, 
     hovertemplate="<br>".join([
         "Zone: %{y}",
         "Beta Robust: %{x}",
@@ -330,6 +332,8 @@ fig_bar = px.bar(
 
 # Personalizar el texto de hover para incluir las etiquetas 'P-Value' y 'Num.Observ'
 fig_bar.update_traces(
+    marker_line_color='rgb(204, 202, 202)',  # Define el color del borde de las barras
+    marker_line_width=0.5, 
     hovertemplate="<br>".join([
         "Buyer: %{x}",
         "Beta Robust: %{y:.3f}",  # Asumiendo que quieras mostrar beta robust como flotante

@@ -36,6 +36,7 @@ df_sector = load_data(sector_summary_url)
 df_industry = load_data(industry_summary_url)
 df_buyer = load_data(buyer_summary_url)
 df_zone = load_data(zone_sumary_url)
+df_ownership = load_data(ownership_summary_url)
 
 # Sidebar - Selección de tipo de test
 with st.sidebar:
@@ -99,6 +100,7 @@ df_sector_filtered = df_sector[df_sector['test_type'] == test_type].fillna(0)
 df_industry_filtered = df_industry[(df_industry['test_type'] == test_type) & (df_industry['rubro2'] == rubro2)].fillna(0)
 df_buyer_filtered = df_buyer[(df_buyer['test_type'] == test_type) & (df_buyer['sector'] == sector)]
 df_zone_filtered = df_zone[(df_zone['test_type'] == test_type)].fillna(0)
+df_ownership_filtered = df_ownership[(df_ownership['test_type'] == test_type)].fillna(0)
 
 # Función para crear un mapa coroplético con escala de colores dinámica
 # Definición de valores mínimos y máximos para la escala de colores
@@ -409,9 +411,36 @@ fig_bar.update_layout(
     ]
 )
 
+####################################
+
 # Distribución de gráficos en el dashboard
 col1, col2, col3 = st.columns([1, 1, 1])
+
+# Crear KPIs en las columnas basadas en el sector filtrado por test_type
+def display_kpi(df, sectors, test_type_selection, col):
+    # Filtrar por sector y test_type
+    sector_data = df[(df['sector'] == sectors) & (df['test_type'] == test_type_selection)]
+    if not sector_data.empty:
+        data = sector_data.iloc[0]  # Asumiendo que hay una sola fila por cada sector y test_type
+        with col:
+            st.markdown(f"#### {sectors}")
+            st.markdown(f"**Beta Robust:** {data['beta_robust']:.4f}")
+            st.markdown(f"**P-Value:** {data['p_value']:.3f}")
+            st.markdown(f"**Num Observ:** {data['num_observ']:,}")
+            st.write(data['description'])
+    else:
+        with col:
+            st.markdown(f"#### {sectors}")
+            st.markdown("**No data available**")
+
+# Llama a la función display_kpi para cada sector y columna correspondiente
+# Asegúrate de que los nombres de las categorías de sector sean exactamente como aparecen en los datos
+display_kpi(df_ownership_filtered, 'Full sample', test_type, col1)
+display_kpi(df_ownership_filtered, 'Bidders without cross-ownership', test_type, col2)
+display_kpi(df_ownership_filtered, 'Bidders with cross-ownership', test_type, col3)
+
 with col1:
+
     st.plotly_chart(fig_chile1, use_container_width=True)
 with col2:
     st.plotly_chart(fig_bar_zones, use_container_width=True)

@@ -1,4 +1,4 @@
-﻿,sector,test_type_ID,test_type,beta_robust,p_value,num_observ,description
+﻿,sample,test_type_ID,test_type,beta_robust,p_value,num_observ,description
 0,Full sample ,1,90-day standardized backlog,-0.0211,0.005,1245402,The null hypothesis of competition is rejected.
 1,Full sample ,2,180-day standardized backlog,-0.0208,0.001,1245407,The null hypothesis of competition is rejected.
 2,Full sample ,3,incumbency status,0.0194,0.005,1295734,The null hypothesis of competition is rejected.

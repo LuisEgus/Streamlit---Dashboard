@@ -4,6 +4,7 @@ import plotly.express as px
 import requests
 from io import StringIO
 import plotly.graph_objects as go
+import numpy as np
 
 # Configuración de la página de Streamlit
 st.set_page_config(page_title="Chile Map Dashboard", page_icon="🌎", layout="wide")
@@ -40,7 +41,7 @@ with st.sidebar:
     st.title('🌎 Chile Data Dashboard')
     test_type = st.selectbox('Select Test Type', df_region['test_type'].unique())
     sector = st.sidebar.selectbox('Select Sector', df_buyer['sector'].unique())
-    zone_selected = st.selectbox('Select Zone', df_zone['zone'].unique())
+    #zone_selected = st.selectbox('Select Zone', df_zone['zone'].unique())
 
 color_theme = ['blues', 'cividis', 'greens', 'inferno', 'magma', 'plasma', 'reds', 'rainbow', 'turbo', 'viridis']
 
@@ -58,125 +59,79 @@ df_filtered = df_region[df_region['test_type'] == test_type].fillna(0)
 df_sector_filtered = df_sector[df_sector['test_type'] == test_type].fillna(0)
 df_industry_filtered = df_industry[df_industry['test_type'] == test_type].fillna(0)
 df_buyer_filtered = df_buyer[(df_buyer['test_type'] == test_type) & (df_buyer['sector'] == sector)]
-df_zone_filtered = df_zone[(df_zone['test_type'] == test_type) & (df_zone['zone'] == zone_selected)].fillna(0)
+df_zone_filtered = df_zone[(df_zone['test_type'] == test_type)].fillna(0)
 
 # Función para crear un mapa coroplético con escala de colores dinámica
-def create_choropleth(df, color_theme):
-    min_val, max_val = df['beta_robust'].min(), df['beta_robust'].max()
-    
-    # Usar una escala de colores de Plotly, y crear una personalizada para el valor 0
-    colorscale = px.colors.diverging.RdBu
-    if min_val >= 0:
-        colorscale = [[0, "white"], [1, colorscale[-1]]]
-    elif max_val <= 0:
-        colorscale = [[0, colorscale[0]], [1, "white"]]
-    else:  
-        zero_norm = abs(min_val) / (max_val - min_val)
-        colorscale = [[0, colorscale[0]], [zero_norm, "white"], [1, colorscale[-1]]]
+# Definición de valores mínimos y máximos para la escala de colores
+min_val, max_val = df_filtered['beta_robust'].min(), df_filtered['beta_robust'].max()
 
-    fig = go.Figure(go.Choropleth(
-        geojson=chile_geojson,
-        locations=df['codregion'],
-        z=df['beta_robust'],
-        colorscale=colorscale,
-        featureidkey="properties.codregion",
-        text=df.apply(lambda row: f"Beta Robust: {row['beta_robust']}<br>p-value: {row['p_value']}<br>Num. Obsev.: {row['num_observ']}", axis=1),
-        hoverinfo="text",
-        marker_line_color='black',
-        marker_line_width=0.5
-    ))
+# Usar una escala de colores de Plotly, y crear una personalizada para el valor 0
+colorscale2 = px.colors.diverging.RdBu
+if min_val >= 0:
+    colorscale2 = [[0, "white"], [1, colorscale2[-1]]]
+elif max_val <= 0:
+    colorscale2 = [[0, colorscale2[0]], [1, "white"]]
+else:
+    zero_norm2 = abs(min_val) / (max_val - min_val)
+    colorscale2 = [[0, colorscale2[0]], [zero_norm2, "white"], [1, colorscale2[-1]]]
 
-    fig.update_geos(
-        fitbounds="locations",
-        visible=False,
-        showcountries=False,
-        showcoastlines=False,
-        showland=False,
-        showocean=False,
-        projection_type="mercator",
-        center={"lat": -35.6751, "lon": -71.543}
-    )
+# Crear el gráfico de mapa coroplético directamente
+fig_chile1 = go.Figure(go.Choropleth(
+    geojson=chile_geojson,
+    locations=df_filtered['codregion'],
+    z=df_filtered['beta_robust'],
+    colorscale=colorscale2,
+    featureidkey="properties.codregion",
+    text=df_filtered.apply(lambda row: f"Beta Robust: {row['beta_robust']}<br>P-value: {row['p_value']}<br>Num. Observ.: {row['num_observ']}", axis=1),
+    hoverinfo="text",
+    marker_line_color='black',
+    marker_line_width=0.5
+))
 
-    fig.update_layout(
-        margin={"r":0, "t":0, "l":0, "b":0},
-        height=500,
-        coloraxis_colorbar={
+fig_chile1.update_geos(
+    fitbounds="geojson",
+    visible=False,
+    showcountries=False,
+    showcoastlines=False,
+    showland=False,
+    showocean=False,
+    projection_type="mercator",
+    center={"lat": -38, "lon": -74}
+)
+
+fig_chile1.update_layout(
+    title={
+        'text': "Chloropetic Map of Chile",
+        'y': 0.975,  # Posición del título en el eje Y, en el rango de 0 a 1
+        'x': 0,  # Posición del título en el eje X, centrado
+    },
+    height=550,
+    coloraxis_colorbar={
         'title':''
-    }
-
-    )
-    return fig
-
-# Crear el gráfico de mapa coroplético
-fig_chile1 = create_choropleth(df_filtered, color_theme)
-
-
-###############PRUEBA
-# Función para crear un mapa coroplético con escala de colores dinámica
-def create_zone_choropleth(df, color_theme):
-        # Establecer los valores mínimo y máximo
-    min_val, max_val = df['beta_robust'].min(), df['beta_robust'].max()
-
-    # Configurar la escala de colores para incluir blanco en el centro si hay valores tanto positivos como negativos
-    colorscale = px.colors.diverging.RdBu
-    midpoint = abs(min_val) / (abs(max_val) + abs(min_val))
-    
-    # Establecer la escala de colores dependiendo del rango de los datos
-    if min_val < 0 and max_val > 0:
-        # Si hay valores negativos y positivos, insertamos blanco en el punto cero exacto
-        colorscale = [
-            [0, colorscale[0]],
-            [midpoint, "white"],
-            [midpoint + 0.01, colorscale[-1]],
-            [1, colorscale[-1]]
-        ]
-    elif max_val <= 0:
-        # Si todos los valores son negativos o cero
-        colorscale = [[0, "white"], [1, colorscale[0]]]
-    elif min_val >= 0:
-        # Si todos los valores son positivos o cero
-        colorscale = [[0, "white"], [1, colorscale[-1]]]
-
-
-    fig = go.Figure(go.Choropleth(
-        geojson=chile_geojson,
-        locations=df['codregion'],
-        z=df['beta_robust'],
-        color_continuous_scale=colorscale,
-        featureidkey="properties.codregion",
-        text=df.apply(lambda row: f"Beta Robust: {row['beta_robust']}<br>p-value: {row['p_value']}<br>Num. Observ.: {row['num_observ']}", axis=1),
-        hoverinfo="text",
-        marker_line_color='black',
-        marker_line_width=0.5
-    ))
-
-    fig.update_geos(
-        fitbounds="locations",
-        visible=False,
-        showcountries=False,
-        showcoastlines=False,
-        showland=False,
-        showocean=False,
-        projection_type="mercator",
-        center={"lat": -35.6751, "lon": -71.543}
-    )
-
-    fig.update_layout(
-        title_text="Distribución Espacial de la Beta Robusta en las Regiones de Chile",
-        title_x=0.5,  # Centra el título
-        margin={"r":0, "t":0, "l":0, "b":0},
-        height=500,
-        coloraxis_colorbar={
-            'title':'a'
+    },
+    margin={"r":10, "t":50, "l":10, "b":100},
+     geo=dict(
+        domain={'x': [0, 1], 'y': [0, 1]}  # Ajuste del dominio para maximizar el uso del espacio
+    ),
+    #plot_bgcolor='rgb(233,233,233)',  # Fondo del área del gráfico (gris claro)
+    #paper_bgcolor='rgb(233,233,233)',  # Fondo del área fuera del gráfico (gris claro)
+    shapes=[
+        # Borde no lleno, solo el contorno
+        {
+            'type': 'rect',
+            'xref': 'paper',
+            'yref': 'paper',
+            'x0': 0,
+            'y0': 0,
+            'x1': 1,
+            'y1': 1,
+            'line': {
+                'color': 'rgb(204, 202, 202)',
+                'width': 1,
+            },
         }
-
-    )
-    return fig
-
-
-# Crear el gráfico de mapa coroplético
-fig_chile2 = create_choropleth(df_zone_filtered, color_theme)
-
+    ]
+)
 
 # Función auxiliar para construir una escala de colores que mapea 0 a blanco
 def build_colorscale(min_val, max_val, color_theme):
@@ -192,66 +147,169 @@ def build_colorscale(min_val, max_val, color_theme):
         scale = [[0, "white"], [1, px.colors.diverging.RdBu[-1]]]
     return scale
 
+###############PRUEBA
+
+
+# Crear el gráfico de barras para zone Summary filtrado
+colorscale_bar = build_colorscale(df_zone_filtered['beta_robust'].min(), df_zone_filtered['beta_robust'].max(), color_theme)
+fig_bar_zones = px.bar(
+    df_zone_filtered,
+    x='beta_robust',
+    y='zone',
+    color='beta_robust',  # Asegurarse de que la barra se coloree basada en 'beta_robust'
+    color_continuous_scale=colorscale_bar,  # Usar la escala de colores personalizada
+    title='Bar Chart of Zones',
+    labels={'zone': 'Zones', 'beta_robust': 'Beta Robust'},
+    hover_data={
+        'p_value': ':.3f',  # Formato de 3 decimales para p_value
+        'num_observ': True  # Mostrar como está
+    },
+    custom_data=['p_value', 'num_observ']  # Datos personalizados para usar en las etiquetas de hover
+)
+
+
+fig_bar_zones.update_traces(
+    hovertemplate="<br>".join([
+        "Zone: %{y}",
+        "Beta Robust: %{x}",
+        "P-Value: %{customdata[0]:.3f}",  # Formato de 3 decimales
+        "Num.Observ: %{customdata[1]}"
+    ])
+)
+
+fig_bar_zones.update_layout(
+    height=550,
+    coloraxis_colorbar={
+        'title':''
+    },
+    margin={"r":10, "t":50, "l":10, "b":100},
+    #plot_bgcolor='rgb(233,233,233)',  # Fondo del área del gráfico (gris claro)
+    #paper_bgcolor='rgb(233,233,233)',  # Fondo del área fuera del gráfico (gris claro)
+    shapes=[
+        # Borde no lleno, solo el contorno
+        {
+            'type': 'rect',
+            'xref': 'paper',
+            'yref': 'paper',
+            'x0': 0,
+            'y0': 0,
+            'x1': 1,
+            'y1': 1,
+            'line': {
+                'color': 'rgb(204, 202, 202)',
+                'width': 1,
+            },
+        }
+    ]
+)
+
+#########################################################
 # Crear un gráfico de vector de calor para los sectores
 colorscale_sector = build_colorscale(df_sector_filtered['beta_robust'].min(), df_sector_filtered['beta_robust'].max(), color_theme)
-fig_heatmap = px.density_heatmap(
-    df_sector_filtered,
-    x='test_type',
-    y='sector',
-    z='beta_robust',
-    color_continuous_scale=colorscale_sector,
-    labels={
-        'beta_robust': 'Beta Robust',
-        'p_value': 'P-Value',
-        'num_observ': 'Number of Observations',
-        'test_type': 'Type of Test',  # Etiqueta para el eje X actualizada
-        'sector': 'Sectors'  # Etiqueta para el eje Y actualizada
-    },
+
+
+# Creación del heatmap con Plotly Graph Objects
+trace2 = go.Heatmap(
+    x=df_sector_filtered['test_type'],
+    y=df_sector_filtered['sector'],
+    z=df_sector_filtered['beta_robust'],
+    colorscale=colorscale_sector,
+    hoverongaps=False,
+    text=df_sector_filtered.apply(lambda row: (
+        f"Beta Robust: {row['beta_robust']:.2f}<br>"
+        f"P-value: {row['p_value']:.2f}<br>"
+        f"Num. Observ: {row['num_observ']}"
+    ), axis=1),
+    hoverinfo='text'
+)
+
+# Configuración del layout del gráfico
+layout = go.Layout(
     title='Vector of sectors',
-    hover_data={
-        'beta_robust': True,
-        'p_value': True,
-        'num_observ': True,
-        'description': True  # Asumiendo que no quieres mostrar la descripción
-    }
-    
-)
-# Modificar la altura del gráfico de vector de calor para los sectores
-fig_heatmap.update_layout(
-    height=500,
-        # Ajusta esto a la altura deseada
-    # width=800,
-    coloraxis_colorbar={
-        'title':''
-    }  # Descomenta y ajusta esto si también quieres cambiar el ancho
+    xaxis={'title': 'Type of Test'},
+    yaxis={'title': 'Sector'},
+    height=550,
+    #margin={"r":0, "t":50, "l":0, "b":100},
+    coloraxis_colorbar={'title': ''},
+    margin={"r":10, "t":50, "l":10, "b":100},
+    #plot_bgcolor='rgb(233,233,233)',  # Fondo del área del gráfico (gris claro)
+    #paper_bgcolor='rgb(233,233,233)',  # Fondo del área fuera del gráfico (gris claro)
+    shapes=[
+        # Borde no lleno, solo el contorno
+        {
+            'type': 'rect',
+            'xref': 'paper',
+            'yref': 'paper',
+            'x0': 0,
+            'y0': 0,
+            'x1': 1,
+            'y1': 1,
+            'line': {
+                'color': 'rgb(204, 202, 202)',
+                'width': 1,
+            },
+        }
+    ]
 )
 
 
+fig_heatmap = go.Figure(data=trace2, layout=layout)
+
+# Crear la figura y agregar el trazo del heatmap
+#######################################################
 # Creación de la matriz de calor para la industria
 colorscale_industry = build_colorscale(df_industry_filtered['beta_robust'].min(), df_industry_filtered['beta_robust'].max(), color_theme)
-fig_heatmap_industry = px.density_heatmap(
-    df_industry_filtered,
-    x='rubro3',
-    y='zone',
-    z='beta_robust',
-    color_continuous_scale=colorscale_industry,
-    title='Matrix of macrozones',
-    labels={'zone': 'Zone', 'rubro3': 'Drug Group'},
-)
-fig_heatmap_industry.update_traces(
-    hovertemplate='<b>%{x}</b><br>%{y}<br>Beta Robust: %{z:.2f}<br>P-value: %{customdata[0]:.2f}<br>Num. Observ: %{customdata[1]:.0f}',
-    customdata=df_industry_filtered[['p_value', 'num_observ']].values
+
+# Preparación de los datos
+df_industry_prepared = df_industry_filtered.sort_values(by=['rubro3', 'zone'])
+
+# Creación del heatmap con Plotly Graph Objects
+trace = go.Heatmap(
+    x=df_industry_prepared['rubro3'],
+    y=df_industry_prepared['zone'],
+    z=df_industry_prepared['beta_robust'],
+    colorscale=colorscale_industry,
+    hoverongaps=False,
+    text=df_industry_prepared.apply(lambda row: (
+        f"Beta Robust: {row['beta_robust']:.2f}<br>"
+        f"P-value: {row['p_value']:.2f}<br>"
+        f"Num. Observ: {row['num_observ']}"
+    ), axis=1),
+    hoverinfo='text'
 )
 
-# Modificar la altura de la matriz de calor para la industria
-fig_heatmap_industry.update_layout(
-    height=700,  # Ajusta esto a la altura deseada
-    # width=800,  # Descomenta y ajusta esto si también quieres cambiar el ancho
-    margin={"r":0, "t":50, "l":0, "b":100},
-    coloraxis_colorbar={
-        'title':''
-    }
+# Configuración del layout del gráfico
+layout = go.Layout(
+    title='Matrix of macrozones',
+    xaxis={'title': 'Drug Group'},
+    yaxis={'title': 'Zone'},
+    height=700,
+    coloraxis_colorbar={'title': ''},
+    margin={"r":10, "t":50, "l":10, "b":100},
+    #plot_bgcolor='rgb(233,233,233)',  # Fondo del área del gráfico (gris claro)
+    #paper_bgcolor='rgb(233,233,233)',  # Fondo del área fuera del gráfico (gris claro)
+    shapes=[
+        # Borde no lleno, solo el contorno
+        {
+            'type': 'rect',
+            'xref': 'paper',
+            'yref': 'paper',
+            'x0': 0,
+            'y0': 0,
+            'x1': 1,
+            'y1': 1,
+            'line': {
+                'color': 'rgb(204, 202, 202)',
+                'width': 1,
+            },
+        }
+    ]
 )
+
+# Crear la figura y agregar el trazo del heatmap
+fig_heatmap_industry = go.Figure(data=trace, layout=layout)
+
+################################################################
 
 # Crear el gráfico de barras para Buyer Summary filtrado
 colorscale_bar = build_colorscale(df_buyer_filtered['beta_robust'].min(), df_buyer_filtered['beta_robust'].max(), color_theme)
@@ -263,14 +321,45 @@ fig_bar = px.bar(
     color_continuous_scale=colorscale_bar,  # Usar la escala de colores personalizada
     title='Bar Chart of Buyers',
     labels={'rutunidadcompra': 'Buyer', 'beta_robust': 'Beta Robust'},
-    hover_data=['p_value', 'num_observ']
+    hover_data={
+        'p_value': ':.3f',  # Formato de 3 decimales para p_value
+        'num_observ': True  # Mostrar como está
+    },
+    custom_data=['p_value', 'num_observ']  # Datos personalizados para usar en las etiquetas de hover
 )
+
+# Personalizar el texto de hover para incluir las etiquetas 'P-Value' y 'Num.Observ'
+fig_bar.update_traces(
+    hovertemplate="<br>".join([
+        "Buyer: %{x}",
+        "Beta Robust: %{y:.3f}",  # Asumiendo que quieras mostrar beta robust como flotante
+        "P-Value: %{customdata[0]:.3f}",  # Formato de 3 decimales
+        "Num.Observ: %{customdata[1]}"
+    ])
+)
+
 fig_bar.update_layout(
-    margin={"r":0, "t":50, "l":0, "b":0},
     height=500,
+    width=200,
     coloraxis_colorbar={
-        'title':''
-    }
+        'title':'Beta Robust Scale'
+    },
+    margin={"r":10, "t":50, "l":10, "b":100},
+    shapes=[
+        {
+            'type': 'rect',
+            'xref': 'paper',
+            'yref': 'paper',
+            'x0': 0,
+            'y0': 0,
+            'x1': 1,
+            'y1': 1,
+            'line': {
+                'color': 'rgb(204, 202, 202)',
+                'width': 1,
+            },
+        }
+    ]
 )
 
 # Distribución de gráficos en el dashboard
@@ -278,7 +367,7 @@ col1, col2, col3 = st.columns([1, 1, 1])
 with col1:
     st.plotly_chart(fig_chile1, use_container_width=True)
 with col2:
-    st.plotly_chart(fig_chile2, use_container_width=True)
+    st.plotly_chart(fig_bar_zones, use_container_width=True)
 with col3:
     st.plotly_chart(fig_heatmap, use_container_width=True)
 

@@ -1,13 +1,19 @@
+CD C:\Users\Admin\Documents\GitHub\Streamlit---Dashboard
+
+
 iniciar dashboard:
+
 
 En PC:
 streamlit run streamlit_app.py
 
 streamlit run streamlit_app1.py
 
-streamlit run streamlit_app2.py
+streamlit run streamlit_app2.py (menú lateral)
 
-streamlit run streamlit_app3.py
+streamlit run streamlit_app3.py (menú individual)
+
+streamlit run streamlit_app4.py
 
 En Laptop QLAB:
 
@@ -34,3 +40,10 @@ Negrita a los labels
 
 invertir matrix y barchat
 
+
+Notas 2:
+
+Barchat vertical <-- cloropeth 2
+
+
+un barchat de dos categorías (con la nueva base)

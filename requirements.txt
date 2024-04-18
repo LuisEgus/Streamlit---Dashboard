@@ -1,0 +1,7 @@
+streamlit
+pandas
+plotly.express
+requests
+io
+plotly.graph_objects
+numpy

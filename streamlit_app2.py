@@ -41,8 +41,46 @@ with st.sidebar:
     st.title('🌎 Chile Data Dashboard')
     test_type = st.selectbox('Select Test Type', df_region['test_type'].unique())
     sector = st.sidebar.selectbox('Select Sector', df_buyer['sector'].unique())
-    #zone_selected = st.selectbox('Select Zone', df_zone['zone'].unique())
+    rubro2 = st.selectbox('Select Rubro2', df_industry['rubro2'].unique())
 
+    #zone_selected = st.selectbox('Select Zone', df_zone['zone'].unique())
+    # Justificar texto usando HTML y CSS
+    st.markdown("""
+
+        <br>
+        <br>
+ 
+    """, unsafe_allow_html=True)
+    
+    st.markdown("""
+    <div style='text-align: center;'>
+        <b>Detection of Collusion in Public Procurement Auctions: The
+Case of the Chilean Pharmaceutical Market</b><br>
+        <br>
+        <div style='text-align: justify;'>
+        We apply the regression discontinuity (RD) based collusion tests developed in Kawai et al.
+        (2022) to detect and flag collusion in public procurement auctions for pharmaceutical products
+        in Chile from 2017 to 2022. We observe that marginal winning firms are significantly more likely
+        to be incumbents than marginal losers. Additionally, the standardized backlog of marginal
+        winning firms is significantly lower than that of marginal losers. These findings underscore
+        non-competitive behaviors, suggesting the presence of collusive agreements involving both
+        market share allocation and bid rotation in public procurement auctions within the Chilean
+        pharmaceutical market.
+        <br>
+        <br>     
+        When dividing the data sample into procurement auctions with
+        cross-ownership between bidders and those without, we find collusion to be more prevalent in
+        auctions with ownership connections, specifically in the form of bid rotation. However, we did
+        not find statistically significant results for the incumbency status test. Furthermore, we conduct
+        collusion tests at various levels, including sector, zone, region, buyer, pharmaceutical drug
+        category, pharmaceutical product, and industry. Our findings indicate evidence of collusive
+        agreements involving both market share allocations and bid rotation in 2 out of 5 sectors, all
+        zones, 11 out of 16 regions, 93 out of 550 buyers (public agencies), 44 out of 109 pharmaceutical
+        drug categories, 166 out of 1689 pharmaceutical products, and 64 out of 545 industries analyzed.
+    </div>
+    """, unsafe_allow_html=True)
+
+    
 color_theme = ['blues', 'cividis', 'greens', 'inferno', 'magma', 'plasma', 'reds', 'rainbow', 'turbo', 'viridis']
 
 # Definir un diccionario de zonas y regiones
@@ -57,7 +95,7 @@ zone_to_regions = {
 # Filtrar datos
 df_filtered = df_region[df_region['test_type'] == test_type].fillna(0)
 df_sector_filtered = df_sector[df_sector['test_type'] == test_type].fillna(0)
-df_industry_filtered = df_industry[df_industry['test_type'] == test_type].fillna(0)
+df_industry_filtered = df_industry[(df_industry['test_type'] == test_type) & (df_industry['rubro2'] == rubro2)].fillna(0)
 df_buyer_filtered = df_buyer[(df_buyer['test_type'] == test_type) & (df_buyer['sector'] == sector)]
 df_zone_filtered = df_zone[(df_zone['test_type'] == test_type)].fillna(0)
 
@@ -133,8 +171,11 @@ fig_chile1.update_layout(
     ]
 )
 
-# Función auxiliar para construir una escala de colores que mapea 0 a blanco
 def build_colorscale(min_val, max_val, color_theme):
+    # Si tanto el valor mínimo como el máximo son 0, retornar una escala de colores que sólo muestre blanco
+    if min_val == 0 and max_val == 0:
+        return [[0, "white"], [1, "white"]]
+    
     if min_val < 0 and max_val > 0:
         scale = [
             [0, px.colors.diverging.RdBu[0]],
@@ -146,6 +187,7 @@ def build_colorscale(min_val, max_val, color_theme):
     else:
         scale = [[0, "white"], [1, px.colors.diverging.RdBu[-1]]]
     return scale
+
 
 ###############PRUEBA
 
@@ -282,8 +324,8 @@ trace = go.Heatmap(
 
 # Configuración del layout del gráfico
 layout = go.Layout(
-    title='Matrix of macrozones',
-    xaxis={'title': 'Drug Group'},
+    title='Analysis at the Industry Level',
+    xaxis={'title': 'Pharmaceutical Drug Group'},
     yaxis={'title': 'Zone'},
     height=700,
     coloraxis_colorbar={'title': ''},

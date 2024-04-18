@@ -28,6 +28,7 @@ sector_summary_url = 'https://raw.githubusercontent.com/LuisEgus/Streamlit---Das
 industry_summary_url = 'https://raw.githubusercontent.com/LuisEgus/Streamlit---Dashboard/main/data%20CHILE/dta/industry_summary.csv'
 buyer_summary_url = 'https://raw.githubusercontent.com/LuisEgus/Streamlit---Dashboard/main/data%20CHILE/dta/buyer_summary.csv'
 zone_sumary_url = 'https://raw.githubusercontent.com/LuisEgus/Streamlit---Dashboard/main/data%20CHILE/dta/zone_summary%20(1).csv'
+ownership_summary_url = 'https://raw.githubusercontent.com/LuisEgus/Streamlit---Dashboard/main/data%20CHILE/dta/ownership_summary.csv'
 
 # Cargar los dataset como dataframe
 df_region = load_data(region_summary_url)

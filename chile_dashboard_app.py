@@ -203,7 +203,8 @@ bar_trace = go.Bar(
         color=df_zone_filtered['beta_robust'],  # Asigna un color basado en el valor de 'beta_robust'
         colorscale=colorscale_bar,  # Usa la escala de colores personalizada
         cmin=df_zone_filtered['beta_robust'].min(),  # Mínimo de la escala de colores
-        cmax=df_zone_filtered['beta_robust'].max(),  # Máximo de la escala de colores
+        cmax=df_zone_filtered['beta_robust'].max(),
+        line=dict(color='rgb(204, 202, 202)', width=0.75),  # Máximo de la escala de colores
         colorbar_title=''
     ),
     hoverinfo='text',
@@ -351,7 +352,8 @@ bar_trace = go.Bar(
     marker=dict(
         color=df_buyer_filtered['beta_robust'],  # Asigna un color basado en el valor de 'beta_robust'
         colorscale=colorscale_bar,  # Usa la escala de colores personalizada
-        showscale=True  # Muestra la barra de la escala de colores
+        showscale=True,
+        line=dict(color='rgb(204, 202, 202)', width=0.75),  # Muestra la barra de la escala de colores
     ),
     hoverinfo='text',
     hovertemplate=(

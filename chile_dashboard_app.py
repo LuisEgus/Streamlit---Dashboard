@@ -93,6 +93,7 @@ df_buyer_filtered = df_buyer[(df_buyer['test_type'] == test_type) & (df_buyer['s
 df_zone_filtered = df_zone[(df_zone['test_type'] == test_type)].fillna(0)
 df_ownership_filtered = df_ownership[(df_ownership['test_type'] == test_type)]
 
+###########
 # Función para crear un mapa coroplético con escala de colores dinámica
 # Definición de valores mínimos y máximos para la escala de colores
 min_val, max_val = df_filtered['beta_robust'].min(), df_filtered['beta_robust'].max()
@@ -163,7 +164,11 @@ fig_chile1.update_layout(
             },
         }
     ]
+                     
 )
+
+
+####Función para escala de colores:
 
 def build_colorscale(min_val, max_val, color_theme):
     # Si tanto el valor mínimo como el máximo son 0, retornar una escala de colores que sólo muestre blanco
@@ -189,62 +194,41 @@ def build_colorscale(min_val, max_val, color_theme):
 # Crear el gráfico de barras para zone Summary filtrado
 colorscale_bar = build_colorscale(df_zone_filtered['beta_robust'].min(), df_zone_filtered['beta_robust'].max(), color_theme)
 
-fig_bar_zones = px.bar(
-    df_zone_filtered,
-    x='beta_robust',
-    y='zone',
-    color='beta_robust',  # Asegurarse de que la barra se coloree basada en 'beta_robust'
-    color_continuous_scale=colorscale_bar,  # Usar la escala de colores personalizada
-    title='Bar Chart of Zones',
-    labels={'zone': 'Zones', 'beta_robust': 'Beta Robust'},
-    hover_data={
-        'p_value': ':.3f',  # Formato de 3 decimales para p_value
-        'num_observ': True  # Mostrar como está
-    },
-    custom_data=['p_value', 'num_observ']  # Datos personalizados para usar en las etiquetas de hover
+# Crear el gráfico de barras horizontal con Plotly Graph Objects
+bar_trace = go.Bar(
+    x=df_zone_filtered['beta_robust'],  # Valores para la longitud de las barras
+    y=df_zone_filtered['zone'],  # Valores para el eje Y
+    orientation='h',  # Hace que el gráfico sea horizontal
+    marker=dict(
+        color=df_zone_filtered['beta_robust'],  # Asigna un color basado en el valor de 'beta_robust'
+        colorscale=colorscale_bar,  # Usa la escala de colores personalizada
+        cmin=df_zone_filtered['beta_robust'].min(),  # Mínimo de la escala de colores
+        cmax=df_zone_filtered['beta_robust'].max(),  # Máximo de la escala de colores
+        colorbar_title=''
+    ),
+    hoverinfo='text',
+    text=df_zone_filtered.apply(lambda row: f"Zone: {row['zone']}<br>Beta Robust: {row['beta_robust']:.3f}<br>P-Value: {row['p_value']:.3f}<br>Num.Observ: {row['num_observ']}", axis=1)
 )
 
+# Crear la figura con el objeto Bar y la configuración de layout
+fig_bar_zones = go.Figure(data=[bar_trace])
 
-fig_bar_zones.update_traces(
-    marker_line_color='rgb(204, 202, 202)',  # Define el color del borde de las barras
-    marker_line_width=0.5, 
-    hovertemplate="<br>".join([
-        "Zone: %{y}",
-        "Beta Robust: %{x}",
-        "P-Value: %{customdata[0]:.3f}",  # Formato de 3 decimales
-        "Num.Observ: %{customdata[1]}"
-    ])
-)
-
+# Actualizar el layout de la figura para añadir título y la barra de colores
 fig_bar_zones.update_layout(
+    title='Bar Chart of Zones',
+    xaxis_title="Beta Robust",
+    yaxis_title="Zones",
     height=550,
-    coloraxis_colorbar={
-        'title': '',
-        'len': 0.75,  # Ajustar la longitud de la barra de colores
-        'thickness': 10,  # Ajustar el grosor de la barra de colores
-        'borderwidth': 0,  # Ancho del borde
-        'bordercolor': 'rgb(204, 202, 202)',  # Color del borde
-         
-        },
     margin=dict(r=20, t=50, l=10, b=100),
-    #plot_bgcolor='rgb(233,233,233)',  # Fondo del área del gráfico (gris claro)
-    #paper_bgcolor='rgb(233,233,233)',  # Fondo del área fuera del gráfico (gris claro)
-    shapes=[
-        # Borde no lleno, solo el contorno
-        {
-            'type': 'rect',
-            'xref': 'paper',
-            'yref': 'paper',
-            'x0': 0,
-            'y0': 0,
-            'x1': 1,
-            'y1': 1,
-            'line': {
-                'color': 'rgb(204, 202, 202)',
-                'width': 1,
-            },
-        }
-    ]
+    # Configuración de la barra de colores
+    coloraxis=dict(
+        colorbar_len=0.5,  # Longitud de la barra de colores
+        colorbar_thickness=10,  # Grosor de la barra de colores
+        colorbar_title='',
+        colorscale=colorscale_bar,  # Usa la escala de colores personalizada
+        cmin=df_zone_filtered['beta_robust'].min(),  # Mínimo de la escala de colores
+        cmax=df_zone_filtered['beta_robust'].max()  # Máximo de la escala de colores
+    )
 )
 
 #########################################################

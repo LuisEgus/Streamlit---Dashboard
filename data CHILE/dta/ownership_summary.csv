@@ -1,7 +1,7 @@
 ﻿,sample,test_type_ID,test_type,beta_robust,p_value,num_observ,description
-0,Full sample ,1,90-Day Standardized Backlog,-0.0211,0.005,1245402,The null hypothesis of competition is rejected.
-1,Full sample ,2,180-Day Standardized Backlog,-0.0208,0.001,1245407,The null hypothesis of competition is rejected.
-2,Full sample ,3,Incumbency Status,0.0194,0.005,1295734,The null hypothesis of competition is rejected.
+0,Full sample,1,90-Day Standardized Backlog,-0.0211,0.005,1245402,The null hypothesis of competition is rejected.
+1,Full sample,2,180-Day Standardized Backlog,-0.0208,0.001,1245407,The null hypothesis of competition is rejected.
+2,Full sample,3,Incumbency Status,0.0194,0.005,1295734,The null hypothesis of competition is rejected.
 3,Bidders without cross-ownership,1,90-Day Standardized Backlog,-0.0189,0.004,1213105,The null hypothesis of competition is rejected.
 4,Bidders without cross-ownership,2,180-Day Standardized Backlog,-0.0195,0.001,1213110,The null hypothesis of competition is rejected.
 5,Bidders without cross-ownership,3,Incumbency Status,0.0206,0.007,1262650,The null hypothesis of competition is rejected.

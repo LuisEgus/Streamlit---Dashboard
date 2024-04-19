@@ -91,7 +91,7 @@ df_sector_filtered = df_sector[df_sector['test_type'] == test_type].fillna(0)
 df_industry_filtered = df_industry[(df_industry['test_type'] == test_type) & (df_industry['rubro2'] == rubro2)].fillna(0)
 df_buyer_filtered = df_buyer[(df_buyer['test_type'] == test_type) & (df_buyer['sector'] == sector)]
 df_zone_filtered = df_zone[(df_zone['test_type'] == test_type)].fillna(0)
-df_ownership_filtered = df_ownership[(df_ownership['test_type'] == test_type)]
+df_ownership_filtered = df_ownership[(df_ownership['test_type'] == test_type)].fillna(0)
 
 # Función para crear un mapa coroplético con escala de colores dinámica
 # Definición de valores mínimos y máximos para la escala de colores
@@ -402,8 +402,28 @@ fig_bar.update_layout(
 )
 
 ####################################
+# Mostrar los datos filtrados para depuración
+st.write("Filtered Data:", df_ownership)
 
+# Crear columnas para los diferentes 'samples' y mostrar KPIs
+samples = ['Full sample', 'Bidders without cross-ownership', 'Bidders with cross-ownership']
+types = []
+columns = st.columns(len(samples))
 
+for col, sample in zip(columns, samples):
+    with col:
+        st.subheader(f'KPIs for {sample}')
+        # Filtrar los datos aquí por 'sample' y 'test_type'
+        sample_data = df_ownership[(df_ownership['sample'] == sample) & (df_ownership['test_type'] == types)]
+        if not sample_data.empty:
+            # Asumiendo que queremos mostrar el primer resultado filtrado
+            st.metric(label="Beta Robust", value=f"{sample_data['beta_robust'].iloc[0]:.4f}")
+            st.metric(label="P-Value", value=f"{sample_data['p_value'].iloc[0]:.4f}")
+            st.metric(label="Num Observ", value=f"{sample_data['num_observ'].iloc[0]}")
+        else:
+            st.write("No data available for this test type and sample combination.")
+
+            
 # Distribución de gráficos en el dashboard
 col1, col2, col3 = st.columns(3)
 

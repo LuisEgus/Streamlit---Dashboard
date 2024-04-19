@@ -277,6 +277,7 @@ layout = go.Layout(
 
 # Crear la figura y agregar el trazo del heatmap
 fig_heatmap = go.Figure(data=[trace2], layout=layout)
+
 # Crear la figura y agregar el trazo del heatmap
 #######################################################
 # Creación de la matriz de calor para la industria

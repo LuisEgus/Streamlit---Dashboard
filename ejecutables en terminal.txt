@@ -11,6 +11,8 @@ streamlit run streamlit_app1.py
 
 streamlit run streamlit_app2.py (menú lateral)
 
+streamlit run app3.py
+
 streamlit run streamlit_app3.py (menú individual)
 
 streamlit run streamlit_app4.py

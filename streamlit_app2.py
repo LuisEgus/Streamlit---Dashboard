@@ -85,22 +85,13 @@ Case of the Chilean Pharmaceutical Market</b><br>
     
 color_theme = ['blues', 'cividis', 'greens', 'inferno', 'magma', 'plasma', 'reds', 'rainbow', 'turbo', 'viridis']
 
-# Definir un diccionario de zonas y regiones
-zone_to_regions = {
-    'North': [2, 15, 3, 1],
-    'South': [11, 9, 10, 14, 12],
-    'South Center': [8, 6, 7, 16],
-    'North Center': [4, 5],
-    'Metropolitan': [13]
-}
-
 # Filtrar datos
 df_filtered = df_region[df_region['test_type'] == test_type].fillna(0)
 df_sector_filtered = df_sector[df_sector['test_type'] == test_type].fillna(0)
 df_industry_filtered = df_industry[(df_industry['test_type'] == test_type) & (df_industry['rubro2'] == rubro2)].fillna(0)
 df_buyer_filtered = df_buyer[(df_buyer['test_type'] == test_type) & (df_buyer['sector'] == sector)]
 df_zone_filtered = df_zone[(df_zone['test_type'] == test_type)].fillna(0)
-df_ownership_filtered = df_ownership[(df_ownership['test_type'] == test_type)].fillna(0)
+df_ownership_filtered = df_ownership[(df_ownership['test_type'] == test_type)]
 
 # Función para crear un mapa coroplético con escala de colores dinámica
 # Definición de valores mínimos y máximos para la escala de colores
@@ -137,7 +128,7 @@ fig_chile1.update_geos(
     showland=False,
     showocean=False,
     projection_type="mercator",
-    center={"lat": -38, "lon": -74}
+    center={"lat":-35.675147, "lon":-71.542969}
 )
 
 fig_chile1.update_layout(
@@ -276,7 +267,6 @@ layout = go.Layout(
     xaxis={'title': 'Type of Test'},
     yaxis={'title': 'Sector'},
     height=550,
-    #margin={"r":0, "t":50, "l":0, "b":100},
     coloraxis_colorbar={'title': ''},
     margin={"r":10, "t":50, "l":10, "b":100},
     #plot_bgcolor='rgb(233,233,233)',  # Fondo del área del gráfico (gris claro)
@@ -413,30 +403,11 @@ fig_bar.update_layout(
 
 ####################################
 
+
 # Distribución de gráficos en el dashboard
 col1, col2, col3 = st.columns(3)
 
-# Crear KPIs en las columnas basadas en el sector filtrado por test_type
-def display_kpi(df, sample_category, col):
-    # Filtrar por la categoría de muestra correcta del dataframe de ownership
-    sample_data = df[df['sample'] == sample_category]
-    if not sample_data.empty:
-        data = sample_data.iloc[0]
-        col.markdown(f"### {sample_category}")
-        col.markdown(f"**Beta Robust:** {data['beta_robust']:.4f}")
-        col.markdown(f"**P-Value:** {data['p_value']:.3f}")
-        col.markdown(f"**Num Observ:** {int(data['num_observ']):,}")
-    else:
-        col.markdown(f"### {sample_category}")
-        col.markdown("**No data available**")
-
-# Ahora llama a display_kpi con los nombres de las categorías correctas
-display_kpi(df_ownership_filtered, 'Full sample', col1)
-display_kpi(df_ownership_filtered, 'Bidders without cross-ownership', col2)
-display_kpi(df_ownership_filtered, 'Bidders with cross-ownership', col3)
-
 with col1:
-
     st.plotly_chart(fig_chile1, use_container_width=True)
 with col2:
     st.plotly_chart(fig_bar_zones, use_container_width=True)

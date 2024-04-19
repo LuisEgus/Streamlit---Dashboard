@@ -1,16 +1,18 @@
 ﻿,zone_ID,zone,test_type_ID,test_type,beta_robust,p_value,num_observ,description
-0,1,Metropolitan,1,90-Day Standardized Backlog,-0.025,0.099,211004.0,The null hypothesis of competition is rejected.
-1,1,Metropolitan,2,180-Day Standardized Backlog,,,,The null hypothesis of competition can not be rejected.
-2,1,Metropolitan,3,Incumbency Status,0.018,0.001,218489.0,The null hypothesis of competition is rejected.
-3,2,North,1,90-Day Standardized Backlog,,,,The null hypothesis of competition can not be rejected.
-4,2,North,2,180-Day Standardized Backlog,,,,The null hypothesis of competition can not be rejected.
-5,2,North,3,Incumbency Status,0.0176,0.021,97137.0,The null hypothesis of competition is rejected.
-6,3,North Center,1,90-Day Standardized Backlog,,,,The null hypothesis of competition can not be rejected.
-7,3,North Center,2,180-Day Standardized Backlog,,,,The null hypothesis of competition can not be rejected.
-8,3,North Center,3,Incumbency Status,0.0244,0.001,195865.0,The null hypothesis of competition is rejected.
 9,4,South ,1,90-Day Standardized Backlog,-0.0267,0.099,206470.0,The null hypothesis of competition is rejected.
 10,4,South ,2,180-Day Standardized Backlog,,,,The null hypothesis of competition can not be rejected.
 11,4,South ,3,Incumbency Status,0.0203,0.001,215437.0,The null hypothesis of competition is rejected.
 12,5,South Center,1,90-Day Standardized Backlog,-0.0246,0.001,546311.0,The null hypothesis of competition is rejected.
 13,5,South Center,2,180-Day Standardized Backlog,-0.0269,0.001,546311.0,The null hypothesis of competition is rejected.
 14,5,South Center,3,Incumbency Status,0.0198,0.001,568806.0,The null hypothesis of competition is rejected.
+0,1,Metropolitan,1,90-Day Standardized Backlog,-0.025,0.099,211004.0,The null hypothesis of competition is rejected.
+1,1,Metropolitan,2,180-Day Standardized Backlog,,,,The null hypothesis of competition can not be rejected.
+2,1,Metropolitan,3,Incumbency Status,0.018,0.001,218489.0,The null hypothesis of competition is rejected.
+6,3,North Center,1,90-Day Standardized Backlog,,,,The null hypothesis of competition can not be rejected.
+7,3,North Center,2,180-Day Standardized Backlog,,,,The null hypothesis of competition can not be rejected.
+8,3,North Center,3,Incumbency Status,0.0244,0.001,195865.0,The null hypothesis of competition is rejected.
+3,2,North,1,90-Day Standardized Backlog,,,,The null hypothesis of competition can not be rejected.
+4,2,North,2,180-Day Standardized Backlog,,,,The null hypothesis of competition can not be rejected.
+5,2,North,3,Incumbency Status,0.0176,0.021,97137.0,The null hypothesis of competition is rejected.
+
+

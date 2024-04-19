@@ -231,6 +231,8 @@ fig_bar_zones.update_layout(
     )
 )
 
+
+
 #########################################################
 # Crear un gráfico de vector de calor para los sectores
 colorscale_sector = build_colorscale(df_sector_filtered['beta_robust'].min(), df_sector_filtered['beta_robust'].max(), color_theme)
@@ -339,56 +341,54 @@ fig_heatmap_industry = go.Figure(data=trace, layout=layout)
 ################################################################
 
 # Crear el gráfico de barras para Buyer Summary filtrado
+# Crea la escala de colores personalizada
 colorscale_bar = build_colorscale(df_buyer_filtered['beta_robust'].min(), df_buyer_filtered['beta_robust'].max(), color_theme)
-fig_bar = px.bar(
-    df_buyer_filtered,
-    x='rutunidadcompra',
-    y='beta_robust',
-    color='beta_robust',  # Asegurarse de que la barra se coloree basada en 'beta_robust'
-    color_continuous_scale=colorscale_bar,  # Usar la escala de colores personalizada
-    title='Bar Chart of Buyers',
-    labels={'rutunidadcompra': '(Public Agency)', 'beta_robust': 'Beta Robust'},
-    hover_data={
-        'p_value': ':.3f',  # Formato de 3 decimales para p_value
-        'num_observ': True  # Mostrar como está
-    },
-    custom_data=['p_value', 'num_observ']  # Datos personalizados para usar en las etiquetas de hover
+
+# Crear el gráfico de barras vertical con Plotly Graph Objects
+bar_trace = go.Bar(
+    x=df_buyer_filtered['rutunidadcompra'],  # Valores para el eje X
+    y=df_buyer_filtered['beta_robust'],  # Valores para la altura de las barras
+    marker=dict(
+        color=df_buyer_filtered['beta_robust'],  # Asigna un color basado en el valor de 'beta_robust'
+        colorscale=colorscale_bar,  # Usa la escala de colores personalizada
+        showscale=True  # Muestra la barra de la escala de colores
+    ),
+    hoverinfo='text',
+    hovertemplate=(
+        "Buyer: %{x}<br>" +
+        "Beta Robust: %{y:.3f}<br>" +
+        "P-Value: %{customdata[0]:.3f}<br>" +
+        "Num.Observ: %{customdata[1]}<extra></extra>"
+    ),
+    customdata=df_buyer_filtered[['p_value', 'num_observ']]
 )
 
-# Personalizar el texto de hover para incluir las etiquetas 'P-Value' y 'Num.Observ'
-fig_bar.update_traces(
-    marker_line_color='rgb(204, 202, 202)',  # Define el color del borde de las barras
-    marker_line_width=0.5, 
-    hovertemplate="<br>".join([
-        "Buyer: %{x}",
-        "Beta Robust: %{y:.3f}",  # Asumiendo que quieras mostrar beta robust como flotante
-        "P-Value: %{customdata[0]:.3f}",  # Formato de 3 decimales
-        "Num.Observ: %{customdata[1]}"
-    ])
-)
+# Crear la figura con el objeto Bar y la configuración de layout
+fig_bar = go.Figure(data=[bar_trace])
 
+# Configuración de la barra de la escala de colores
+colorbar_params = {
+    'title': 'Escala de Beta Robust',
+    'len': 0.5,  # Longitud de la barra de colores
+    'thickness': 10,  # Grosor de la barra de colores
+    'borderwidth': 1,
+    'bordercolor': 'black'
+}
+
+# Actualizar el layout de la figura para añadir título y la barra de colores con el formato deseado
 fig_bar.update_layout(
+    title='Bar Chart of Buyers',
+    xaxis_title="(Public Agency)",
+    yaxis_title="Beta Robust",
     height=500,
-    width=200,
-    coloraxis_colorbar={
-        'title':'Beta Robust Scale'
-    },
-    margin={"r":10, "t":50, "l":10, "b":100},
-    shapes=[
-        {
-            'type': 'rect',
-            'xref': 'paper',
-            'yref': 'paper',
-            'x0': 0,
-            'y0': 0,
-            'x1': 1,
-            'y1': 1,
-            'line': {
-                'color': 'rgb(204, 202, 202)',
-                'width': 1,
-            },
-        }
-    ]
+    width=1200,
+    margin=dict(r=10, t=50, l=10, b=100),
+    coloraxis=dict(
+        colorbar=colorbar_params,
+        colorscale=colorscale_bar,  # Usa la escala de colores personalizada
+        cmin=df_buyer_filtered['beta_robust'].min(),  # Mínimo de la escala de colores
+        cmax=df_buyer_filtered['beta_robust'].max()  # Máximo de la escala de colores
+    )
 )
 
 ####################################

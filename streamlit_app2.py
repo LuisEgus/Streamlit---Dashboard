@@ -320,7 +320,7 @@ layout = go.Layout(
     title='Analysis at the Industry Level',
     xaxis={'title': 'Pharmaceutical Drug Group'},
     yaxis={'title': 'Zone'},
-    height=700,
+    height=500,
     coloraxis_colorbar={'title': ''},
     margin={"r":10, "t":50, "l":10, "b":100},
     #plot_bgcolor='rgb(233,233,233)',  # Fondo del área del gráfico (gris claro)
@@ -408,13 +408,14 @@ columns = st.columns(len(samples))
 
 for col, sample in zip(columns, samples):
     with col:
-        st.subheader(f'Beta Result for {sample}')
+        st.markdown(f'<span style="font-weight: bold; font-size: large;">Beta Result for {sample}</span>', unsafe_allow_html=True)
         # Asegúrate de usar 'sample' en lugar de 'samples' para filtrar los datos
         sample_data = df_ownership_filtered[df_ownership_filtered['sample'] == sample]
         if not sample_data.empty:
             st.metric(label="Beta Robust", value=f"{sample_data['beta_robust'].iloc[0]:.4f}")
             st.metric(label="P-Value", value=f"{sample_data['p_value'].iloc[0]:.4f}")
-            st.metric(label="Num.Observ", value=f"{sample_data['num_observ'].iloc[0]}")
+            formatted_num_observ = f"{sample_data['num_observ'].iloc[0]:,}"
+            st.metric(label="Num Observ", value=formatted_num_observ)
         else:
             st.write("No data available for this test type and sample combination.")
 

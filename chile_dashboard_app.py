@@ -408,17 +408,33 @@ columns = st.columns(len(samples))  # Una columna para cada métrica
 
 for index, sample in enumerate(samples):
     with columns[index]:
-        st.markdown(f'<div style="text-align: justify;"><span style="font-weight: bold; font-size: large;">{sample}</span></div>', unsafe_allow_html=True)
+        # Título del sample
+        st.markdown(f'<div style="text-align: center;"><span style="font-weight: bold; font-size: large;">{sample}</span></div>', unsafe_allow_html=True)
+        # Obtener datos para el sample actual
         sample_data = df_ownership_filtered[df_ownership_filtered['sample'] == sample]
         
         if not sample_data.empty:
-            st.metric("Beta Robust", f"{sample_data['beta_robust'].iloc[0]:.4f}")
-            st.metric("P-Value", f"{sample_data['p_value'].iloc[0]:.4f}")
-            st.metric("N° of observations", f"{sample_data['num_observ'].iloc[0]:,}")
-            st.markdown("""
-            <br>
-            <br>
+            # Métricas en Markdown con estilo personalizado para centrar verticalmente y aumentar tamaño de número
+            beta_robust = sample_data['beta_robust'].iloc[0]
+            p_value = sample_data['p_value'].iloc[0]
+            num_observ = sample_data['num_observ'].iloc[0]
+            # Usamos Markdown para personalizar la presentación de las métricas
+            st.markdown(f"""
+            <div style="text-align: center;">
+                <p><strong>Beta Robust</strong></p>
+                <p style="font-size: xx-large;">{beta_robust:.4f}</p>
+                <p><strong>P-Value</strong></p>
+                <p style="font-size: xx-large;">{p_value:.4f}</p>
+                <p><strong>N° of Observations</strong></p>
+                <p style="font-size: xx-large;">{num_observ:,}</p>
+            </div>
             """, unsafe_allow_html=True)
+            st.markdown(f"""
+            <div style="text-align: center;">
+                        <br>
+            </div>
+            """, unsafe_allow_html=True)
+
         else:
             st.error("No data available for this test type and sample combination.")
 

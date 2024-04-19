@@ -115,7 +115,7 @@ fig_chile1 = go.Figure(go.Choropleth(
     z=df_filtered['beta_robust'],
     colorscale=colorscale2,
     featureidkey="properties.codregion",
-    text=df_filtered.apply(lambda row: f"Beta Robust: {row['beta_robust']}<br>P-value: {row['p_value']}<br>Num. Observ.: {row['num_observ']}", axis=1),
+    text=df_filtered.apply(lambda row: f"Beta Robust: {row['beta_robust']}<br>P-value: {row['p_value']}<br>N° of Observations: {row['num_observ']}", axis=1),
     hoverinfo="text",
     marker_line_color='black',
     marker_line_width=0.5
@@ -214,7 +214,7 @@ bar_trace = go.Bar(
         "Zone: %{y}<br>" +
         "Beta Robust: %{x:.3f}<br>" +
         "P-Value: %{customdata[0]:.3f}<br>" +
-        "Num.Observ: %{customdata[1]}<extra></extra>"
+        "N° of Observations: %{customdata[1]}<extra></extra>"
     ),
     customdata=df_zone_filtered[['p_value', 'num_observ']]
 
@@ -266,7 +266,7 @@ bar_trace = go.Bar(
         "Zone: %{y}<br>" +
         "Beta Robust: %{x:.3f}<br>" +
         "P-Value: %{customdata[0]:.3f}<br>" +
-        "Num.Observ: %{customdata[1]}<extra></extra>"
+        "N° of Observations: %{customdata[1]}<extra></extra>"
     ),
     customdata=df_sector_filtered[['p_value', 'num_observ']]
 
@@ -315,7 +315,7 @@ trace = go.Heatmap(
     text=df_industry_prepared.apply(lambda row: (
         f"Beta Robust: {row['beta_robust']:.2f}<br>"
         f"P-value: {row['p_value']:.2f}<br>"
-        f"Num. Observ: {row['num_observ']}"
+        f"N° of Observations: {row['num_observ']}"
     ) if pd.notna(row['beta_robust']) and row['beta_robust'] != 0 else '', axis=1),
     hoverinfo='text'
 )
@@ -372,7 +372,7 @@ bar_trace = go.Bar(
         "Buyer: %{x}<br>" +
         "Beta Robust: %{y:.3f}<br>" +
         "P-Value: %{customdata[0]:.3f}<br>" +
-        "Num.Observ: %{customdata[1]}<extra></extra>"
+        "N° of Observations: %{customdata[1]}<extra></extra>"
     ),
     customdata=df_buyer_filtered[['p_value', 'num_observ']]
 )

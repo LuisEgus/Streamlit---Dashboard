@@ -404,21 +404,55 @@ fig_bar.update_layout(
 ####################################
 # Crear columnas para los diferentes 'samples' y mostrar KPIs
 samples = ['Full sample ', 'Bidders without cross-ownership', 'Bidders with cross-ownership']
-columns = st.columns(len(samples))
+columns = st.columns(len(samples) * 2)  # Multiplicamos por 2 para tener una columna para la métrica y otra para el gráfico
 
-for col, sample in zip(columns, samples):
-    with col:
-        st.markdown(f'<span style="font-weight: bold; font-size: large;">Beta Result for {sample}</span>', unsafe_allow_html=True)
-        # Asegúrate de usar 'sample' en lugar de 'samples' para filtrar los datos
+for index, sample in enumerate(samples):
+
+    
+    col_metric, col_chart = columns[2*index], columns[2*index + 1]  # Pares de columnas: una para métricas, otra para gráficos
+    with col_metric:
+        st.markdown(f'<div style="text-align: justify;"><span style="font-weight: bold; font-size: large;">Beta Result for {sample}</span></div>', unsafe_allow_html=True)
         sample_data = df_ownership_filtered[df_ownership_filtered['sample'] == sample]
+        
         if not sample_data.empty:
-            st.metric(label="Beta Robust", value=f"{sample_data['beta_robust'].iloc[0]:.4f}")
-            st.metric(label="P-Value", value=f"{sample_data['p_value'].iloc[0]:.4f}")
+            beta_robust = sample_data['beta_robust'].iloc[0]
+            
+            st.metric("Beta Robust", f"{beta_robust:.4f}")
+            st.metric("P-Value", f"{sample_data['p_value'].iloc[0]:.4f}")
             formatted_num_observ = f"{sample_data['num_observ'].iloc[0]:,}"
-            st.metric(label="Num Observ", value=formatted_num_observ)
+            st.metric("Num Observ", formatted_num_observ)
         else:
-            st.write("No data available for this test type and sample combination.")
+            st.error("No data available for this test type and sample combination.")
 
+    with col_chart:
+        if not sample_data.empty:
+            # Determinar la escala de colores en base al valor de 'beta_robust'
+            colorscale = build_colorscale(min_val=sample_data['beta_robust'].min(), max_val=sample_data['beta_robust'].max(), color_theme=px.colors.diverging.RdBu)
+
+            # Crear un gráfico de barra horizontal sin etiquetas y centrado
+            fig = go.Figure(go.Bar(
+                x=[beta_robust], 
+                y=[''],  # Sin etiqueta para el eje Y
+                orientation='h',
+                marker=dict(color=[beta_robust], colorscale=colorscale)
+            ))
+
+            # Actualizar el layout del gráfico para hacerlo estrecho y centrado
+            fig.update_layout(
+                xaxis=dict(showgrid=False, zeroline=False, showticklabels=False),
+                yaxis=dict(showgrid=False, zeroline=False, showticklabels=False, automargin=True),
+                showlegend=False,
+                plot_bgcolor='rgba(0,0,0,0)',  # Fondo transparente
+                margin=dict(l=0, r=0, t=0, b=0),  # Sin márgenes
+                height=300,  # Altura del contenedor del gráfico
+                width=80   # Ancho del contenedor del gráfico
+            )
+
+            # Para centrar la barra verticalmente añadir un margen superior e inferior
+            fig.update_yaxes(range=[-0.5, 0.5])
+
+            st.plotly_chart(fig, use_container_width=False)
+            
 # Distribución de gráficos en el dashboard
 col1, col2, col3 = st.columns([2, 2, 2])
 

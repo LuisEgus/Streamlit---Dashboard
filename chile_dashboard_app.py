@@ -159,7 +159,7 @@ fig_chile1.update_layout(
             'y1': 1,
             'line': {
                 'color': 'rgb(204, 202, 202)',
-                'width': 1,
+                'width': 0,
             },
         }
     ]
@@ -188,6 +188,7 @@ def build_colorscale(min_val, max_val, color_theme):
 
 # Crear el gráfico de barras para zone Summary filtrado
 colorscale_bar = build_colorscale(df_zone_filtered['beta_robust'].min(), df_zone_filtered['beta_robust'].max(), color_theme)
+
 fig_bar_zones = px.bar(
     df_zone_filtered,
     x='beta_robust',
@@ -218,9 +219,14 @@ fig_bar_zones.update_traces(
 fig_bar_zones.update_layout(
     height=550,
     coloraxis_colorbar={
-        'title':''
-    },
-    margin={"r":10, "t":50, "l":10, "b":100},
+        'title': '',
+        'len': 0.75,  # Ajustar la longitud de la barra de colores
+        'thickness': 10,  # Ajustar el grosor de la barra de colores
+        'borderwidth': 0,  # Ancho del borde
+        'bordercolor': 'rgb(204, 202, 202)',  # Color del borde
+         
+        },
+    margin=dict(r=20, t=50, l=10, b=100),
     #plot_bgcolor='rgb(233,233,233)',  # Fondo del área del gráfico (gris claro)
     #paper_bgcolor='rgb(233,233,233)',  # Fondo del área fuera del gráfico (gris claro)
     shapes=[
@@ -267,7 +273,7 @@ layout = go.Layout(
     xaxis={'title': 'Type of Test'},
     yaxis={'title': 'Sector'},
     height=550,
-    coloraxis_colorbar={'title': ''},
+    coloraxis_colorbar={'title': 'Beta Robust Scale'},
     margin={"r":10, "t":50, "l":10, "b":100},
     #plot_bgcolor='rgb(233,233,233)',  # Fondo del área del gráfico (gris claro)
     #paper_bgcolor='rgb(233,233,233)',  # Fondo del área fuera del gráfico (gris claro)
@@ -321,7 +327,7 @@ layout = go.Layout(
     xaxis={'title': 'Pharmaceutical Drug Group'},
     yaxis={'title': 'Zone'},
     height=500,
-    coloraxis_colorbar={'title': ''},
+    coloraxis_colorbar={'title': 'Beta Robust Scale'},
     margin={"r":10, "t":50, "l":10, "b":100},
     #plot_bgcolor='rgb(233,233,233)',  # Fondo del área del gráfico (gris claro)
     #paper_bgcolor='rgb(233,233,233)',  # Fondo del área fuera del gráfico (gris claro)
@@ -357,7 +363,7 @@ fig_bar = px.bar(
     color='beta_robust',  # Asegurarse de que la barra se coloree basada en 'beta_robust'
     color_continuous_scale=colorscale_bar,  # Usar la escala de colores personalizada
     title='Bar Chart of Buyers',
-    labels={'rutunidadcompra': 'Buyer', 'beta_robust': 'Beta Robust'},
+    labels={'rutunidadcompra': '(Public Agency)', 'beta_robust': 'Beta Robust'},
     hover_data={
         'p_value': ':.3f',  # Formato de 3 decimales para p_value
         'num_observ': True  # Mostrar como está

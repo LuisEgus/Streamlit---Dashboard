@@ -403,7 +403,7 @@ fig_bar.update_layout(
 
 ####################################
 # Crear columnas para los diferentes 'samples' y mostrar KPIs
-samples = ['Full sample ', 'Bidders without cross-ownership', 'Bidders with cross-ownership']
+samples = ['Full sample ', 'Auctions involving bidders without cross-ownership', 'Auctions involving bidders with cross-ownership']
 columns = st.columns(len(samples) * 2)  # Multiplicamos por 2 para tener una columna para la métrica y otra para el gráfico
 
 for index, sample in enumerate(samples):
@@ -411,7 +411,7 @@ for index, sample in enumerate(samples):
     
     col_metric, col_chart = columns[2*index], columns[2*index + 1]  # Pares de columnas: una para métricas, otra para gráficos
     with col_metric:
-        st.markdown(f'<div style="text-align: justify;"><span style="font-weight: bold; font-size: large;">Beta Result for {sample}</span></div>', unsafe_allow_html=True)
+        st.markdown(f'<div style="text-align: justify;"><span style="font-weight: bold; font-size: large;">{sample}</span></div>', unsafe_allow_html=True)
         sample_data = df_ownership_filtered[df_ownership_filtered['sample'] == sample]
         
         if not sample_data.empty:

@@ -242,41 +242,60 @@ fig_bar_zones.update_layout(
     )
 )
 
-
-
 #########################################################
-# Crear un gráfico de vector de calor para los sectores
-# Crea la escala de colores personalizada
-colorscale_sector = build_colorscale(df_sector_filtered['beta_robust'].min(), df_sector_filtered['beta_robust'].max(), color_theme)
+# Crear el gráfico de barras para zone Summary filtrado
+colorscale_bar = build_colorscale(df_sector_filtered['beta_robust'].min(), df_sector_filtered['beta_robust'].max(), color_theme)
 
-# Creación del heatmap con Plotly Graph Objects
-trace2 = go.Heatmap(
-    x=df_sector_filtered['test_type'],  # Los datos del eje X son del tipo de prueba
-    y=df_sector_filtered['sector'],     # Los datos del eje Y son los sectores
-    z=df_sector_filtered['beta_robust'], # Los datos de 'z' son los valores de 'beta_robust'
-    colorscale=colorscale_sector,
-    hoverongaps=False,
-    text=df_sector_filtered.apply(lambda row: (
-        f"Beta Robust: {row['beta_robust']:.2f}<br>"
-        f"P-value: {row['p_value']:.2f}<br>"
-        f"Num. Observ: {row['num_observ']}"
-    ) if pd.notna(row['beta_robust']) and row['beta_robust'] != 0 else '', axis=1),
-    hoverinfo='text'
-)
-
-# Configuración del layout del gráfico
-layout = go.Layout(
-    title='Vector of sectors',
-    xaxis={'title': 'Beta Robust'},  # Ajuste para que el título del eje X sea 'Beta Robust'
-    yaxis={'title': 'Sector'},
-    height=550,
-    coloraxis_colorbar={'title': ''},
-    margin={"r":10, "t":50, "l":10, "b":100},
+# Crear el gráfico de barras horizontal con Plotly Graph Objects
+bar_trace = go.Bar(
+    x=df_sector_filtered['beta_robust'],  # Valores para la longitud de las barras
+    y=df_sector_filtered['sector'],  # Valores para el eje Y
+    orientation='h',  # Hace que el gráfico sea horizontal
+    marker=dict(
+        color=df_sector_filtered['beta_robust'],  # Asigna un color basado en el valor de 'beta_robust'
+        colorscale=colorscale_bar,  # Usa la escala de colores personalizada
+        cmin=df_sector_filtered['beta_robust'].min(),  # Mínimo de la escala de colores
+        cmax=df_sector_filtered['beta_robust'].max(),
+        line=dict(color='rgb(204, 202, 202)', width=0.75),  # Máximo de la escala de colores
+        colorbar_title=''
+    ),
+    hoverinfo='text',
+    #text=df_sector_filtered.apply(lambda row: f"Zone: {row['zone']}<br>Beta Robust: {row['beta_robust']:.3f}<br>P-Value: {row['p_value']:.3f}<br>Num.Observ: {row['num_observ']}", axis=1)
     
+    hovertemplate=(
+        "Zone: %{y}<br>" +
+        "Beta Robust: %{x:.3f}<br>" +
+        "P-Value: %{customdata[0]:.3f}<br>" +
+        "Num.Observ: %{customdata[1]}<extra></extra>"
+    ),
+    customdata=df_sector_filtered[['p_value', 'num_observ']]
+
+
 )
 
-# Crear la figura y agregar el trazo del heatmap
-fig_heatmap = go.Figure(data=[trace2], layout=layout)
+# Crear la figura con el objeto Bar y la configuración de layout
+fig_bar_sector = go.Figure(data=[bar_trace])
+
+# Actualizar el layout de la figura para añadir título y la barra de colores
+fig_bar_sector.update_layout(
+    title='Bar Chart of Sectors',
+    xaxis_title="Beta Robust",
+    yaxis_title="Sector",
+    height=550,
+    margin=dict(r=20, t=50, l=10, b=100),
+    # Configuración de la barra de colores
+    coloraxis=dict(
+        colorbar_len=0.5,  # Longitud de la barra de colores
+        colorbar_thickness=10,  # Grosor de la barra de colores
+        colorbar_title='',
+        colorscale=colorscale_bar,  # Usa la escala de colores personalizada
+        cmin=df_sector_filtered['beta_robust'].min(),  # Mínimo de la escala de colores
+        cmax=df_sector_filtered['beta_robust'].max()  # Máximo de la escala de colores
+    )
+)
+
+
+
 
 # Crear la figura y agregar el trazo del heatmap
 #######################################################
@@ -431,7 +450,7 @@ with col1:
 with col2:
     st.plotly_chart(fig_bar_zones, use_container_width=True)
 with col3:
-    st.plotly_chart(fig_heatmap, use_container_width=True)
+    st.plotly_chart(fig_bar_sector, use_container_width=True)
 
 # Mostrar el gráfico de barras y el mapa de calor de la industria
 st.plotly_chart(fig_bar, use_container_width=True)

@@ -89,7 +89,7 @@ color_theme = ['blues', 'cividis', 'greens', 'inferno', 'magma', 'plasma', 'reds
 df_filtered = df_region[df_region['test_type'] == test_type].fillna(0)
 df_sector_filtered = df_sector[df_sector['test_type'] == test_type].fillna(0)
 df_industry_filtered = df_industry[(df_industry['test_type'] == test_type) & (df_industry['rubro2'] == rubro2)].fillna(0)
-df_buyer_filtered = df_buyer[(df_buyer['test_type'] == test_type) & (df_buyer['sector'] == sector)]
+df_buyer_filtered = df_buyer[(df_buyer['test_type'] == test_type) & (df_buyer['sector'] == sector)].fillna(0)
 df_zone_filtered = df_zone[(df_zone['test_type'] == test_type)].fillna(0)
 df_ownership_filtered = df_ownership[(df_ownership['test_type'] == test_type)]
 
@@ -208,7 +208,17 @@ bar_trace = go.Bar(
         colorbar_title=''
     ),
     hoverinfo='text',
-    text=df_zone_filtered.apply(lambda row: f"Zone: {row['zone']}<br>Beta Robust: {row['beta_robust']:.3f}<br>P-Value: {row['p_value']:.3f}<br>Num.Observ: {row['num_observ']}", axis=1)
+    #text=df_zone_filtered.apply(lambda row: f"Zone: {row['zone']}<br>Beta Robust: {row['beta_robust']:.3f}<br>P-Value: {row['p_value']:.3f}<br>Num.Observ: {row['num_observ']}", axis=1)
+    
+    hovertemplate=(
+        "Zone: %{y}<br>" +
+        "Beta Robust: %{x:.3f}<br>" +
+        "P-Value: %{customdata[0]:.3f}<br>" +
+        "Num.Observ: %{customdata[1]}<extra></extra>"
+    ),
+    customdata=df_zone_filtered[['p_value', 'num_observ']]
+
+
 )
 
 # Crear la figura con el objeto Bar y la configuración de layout
@@ -236,55 +246,37 @@ fig_bar_zones.update_layout(
 
 #########################################################
 # Crear un gráfico de vector de calor para los sectores
+# Crea la escala de colores personalizada
 colorscale_sector = build_colorscale(df_sector_filtered['beta_robust'].min(), df_sector_filtered['beta_robust'].max(), color_theme)
-
 
 # Creación del heatmap con Plotly Graph Objects
 trace2 = go.Heatmap(
-    x=df_sector_filtered['test_type'],
-    y=df_sector_filtered['sector'],
-    z=df_sector_filtered['beta_robust'],
+    x=df_sector_filtered['test_type'],  # Los datos del eje X son del tipo de prueba
+    y=df_sector_filtered['sector'],     # Los datos del eje Y son los sectores
+    z=df_sector_filtered['beta_robust'], # Los datos de 'z' son los valores de 'beta_robust'
     colorscale=colorscale_sector,
     hoverongaps=False,
     text=df_sector_filtered.apply(lambda row: (
         f"Beta Robust: {row['beta_robust']:.2f}<br>"
         f"P-value: {row['p_value']:.2f}<br>"
         f"Num. Observ: {row['num_observ']}"
-    ), axis=1),
+    ) if pd.notna(row['beta_robust']) and row['beta_robust'] != 0 else '', axis=1),
     hoverinfo='text'
 )
 
 # Configuración del layout del gráfico
 layout = go.Layout(
     title='Vector of sectors',
-    xaxis={'title': 'Type of Test'},
+    xaxis={'title': 'Beta Robust'},  # Ajuste para que el título del eje X sea 'Beta Robust'
     yaxis={'title': 'Sector'},
     height=550,
-    coloraxis_colorbar={'title': 'Beta Robust Scale'},
+    coloraxis_colorbar={'title': ''},
     margin={"r":10, "t":50, "l":10, "b":100},
-    #plot_bgcolor='rgb(233,233,233)',  # Fondo del área del gráfico (gris claro)
-    #paper_bgcolor='rgb(233,233,233)',  # Fondo del área fuera del gráfico (gris claro)
-    shapes=[
-        # Borde no lleno, solo el contorno
-        {
-            'type': 'rect',
-            'xref': 'paper',
-            'yref': 'paper',
-            'x0': 0,
-            'y0': 0,
-            'x1': 1,
-            'y1': 1,
-            'line': {
-                'color': 'rgb(204, 202, 202)',
-                'width': 1,
-            },
-        }
-    ]
+    
 )
 
-
-fig_heatmap = go.Figure(data=trace2, layout=layout)
-
+# Crear la figura y agregar el trazo del heatmap
+fig_heatmap = go.Figure(data=[trace2], layout=layout)
 # Crear la figura y agregar el trazo del heatmap
 #######################################################
 # Creación de la matriz de calor para la industria
@@ -304,7 +296,7 @@ trace = go.Heatmap(
         f"Beta Robust: {row['beta_robust']:.2f}<br>"
         f"P-value: {row['p_value']:.2f}<br>"
         f"Num. Observ: {row['num_observ']}"
-    ), axis=1),
+    ) if pd.notna(row['beta_robust']) and row['beta_robust'] != 0 else '', axis=1),
     hoverinfo='text'
 )
 

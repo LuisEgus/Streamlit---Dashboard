@@ -51,3 +51,5 @@ Barchat vertical <-- cloropeth 2
 un barchat de dos categorías (con la nueva base)
 
 Ultima base: 1 filtro test_type, y 3 categorías ("")
+
+etiqueta
